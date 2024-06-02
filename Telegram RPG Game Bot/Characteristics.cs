@@ -11,12 +11,13 @@ public class Characteristics
         _constitution = new Characteristic("ТЕЛ", constitution);
     }
 
-    [JsonProperty("Strength")] 
+    //[JsonProperty("Strength")] 
+    [JsonProperty] 
     private Characteristic _strength;
     
-    [JsonProperty("Dexterity")] 
+    [JsonProperty] 
     private Characteristic _dexterity;
     
-    [JsonProperty("Constitution")] 
+    [JsonProperty] 
     private Characteristic _constitution;
 }
