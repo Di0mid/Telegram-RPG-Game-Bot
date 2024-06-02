@@ -4,20 +4,21 @@ using Telegram.Bot.Types;
 
 namespace Telegram_RPG_Game_Bot;
 
-public struct UserCharacterPair
+public struct UserCharacters
 {
-    public UserCharacterPair(User user, Character character)
+    public UserCharacters(User user, Character character)
     {
         _user = user;
-        _character = character;
+        Character = character;
     }
 
     [JsonProperty("User")]
     private User _user;
+    
     [JsonProperty("Character")]
-    private Character _character;
+    public readonly Character Character;
 
-    public bool CompareUser(User user)
+    public bool Equals(User user)
     {
         return _user.Id == user.Id;
     }

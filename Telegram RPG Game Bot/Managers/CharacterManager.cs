@@ -6,8 +6,8 @@ namespace Telegram_RPG_Game_Bot.Managers;
 
 public static class CharacterManager
 {
-    private static List<ChatUserCharacterPair> _characters = new();
-
+    private static List<ChatUserCharacters> _characters = new();
+    
     public static async void TryCreateCharacter(Chat chat, User user, NewCharacterData characterData)
     {
         if (HasCharacter(chat, user))
@@ -19,15 +19,28 @@ public static class CharacterManager
         var character = new Character(characterData);
         if (HasChat(chat))
         {
-            var chatUsers = _characters.First(c => c.CompareChat(chat));
-            chatUsers.AddUserCharacterPair(new UserCharacterPair(user, character));
+            var chatUsers = _characters.First(c => c.Equals(chat));
+            chatUsers.AddCharacter(user, character);
         }
         else
         {
-            _characters.Add(new ChatUserCharacterPair(chat, new List<UserCharacterPair> { new(user, character) }));
+            _characters.Add(new ChatUserCharacters(chat, new List<UserCharacters> { new(user, character) }));
         }
         
         await Bot.SendTextMessageAsync($"*{character.Name}*, добро пожаловать!");        
+    }
+
+    public static bool TryGetCharacter(Chat chat, User user, out Character character)
+    {
+        if (!HasChat(chat))
+        {
+            character = null;
+            return false;
+        }
+        
+        var chatUserCharacterPair = _characters.Find(p => p.Equals(chat));
+        
+        return chatUserCharacterPair.TryGetCharacter(user, out character);
     }
 
     #region CHECKS
@@ -36,8 +49,8 @@ public static class CharacterManager
     {
         if (HasChat(chat))
         {
-            var chatUserCharacterPair = _characters.First(c => c.CompareChat(chat));
-            return chatUserCharacterPair.HasUser(user);
+            var chatUserCharacterPair = _characters.First(c => c.Equals(chat));
+            return chatUserCharacterPair.ContainsUser(user);
         }
 
         return false;
@@ -45,7 +58,7 @@ public static class CharacterManager
 
     private static bool HasChat(Chat chat)
     {
-        return _characters.Any(c => c.CompareChat(chat));
+        return _characters.Any(c => c.Equals(chat));
     }
 
     #endregion
@@ -59,7 +72,7 @@ public static class CharacterManager
 
     public static void LoadCharacters()
     {
-        var characters = SaveAndLoadManager.Load<List<ChatUserCharacterPair>>(
+        var characters = SaveAndLoadManager.Load<List<ChatUserCharacters>>(
             SavePathDatabase.CharactersSavePath, nameof(_characters));
         
         if(characters != null)
