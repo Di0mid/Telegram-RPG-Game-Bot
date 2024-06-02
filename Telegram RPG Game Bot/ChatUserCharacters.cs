@@ -35,12 +35,6 @@ public struct ChatUserCharacters
 
     public bool TryGetCharacter(User user, out Character character)
     {
-        if (!ContainsUser(user))
-        {
-            character = null;
-            return false;
-        }
-
         character = _userCharacters.Find(p => p.CompareUser(user)).Character;
         return character != null;
     }

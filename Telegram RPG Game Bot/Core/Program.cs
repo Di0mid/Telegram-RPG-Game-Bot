@@ -64,7 +64,7 @@ namespace Telegram_RPG_Game_Bot.Core
         private static async Task ErrorHandler(ITelegramBotClient bot, Exception exception,
             CancellationToken cancellationToken)
         {
-            Console.WriteLine(exception.Message);
+            Console.WriteLine(exception);
         }
     }
 }

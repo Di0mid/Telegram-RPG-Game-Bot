@@ -38,7 +38,7 @@ public static class CharacterManager
             return false;
         }
         
-        var chatUserCharacterPair = _characters.Find(p => p.Equals(chat));
+        var chatUserCharacterPair = _characters.Find(p => p.CompareChat(chat));
         
         return chatUserCharacterPair.TryGetCharacter(user, out character);
     }
