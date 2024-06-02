@@ -19,7 +19,7 @@ public static class CharacterManager
         var character = new Character(characterData);
         if (HasChat(chat))
         {
-            var chatUsers = _characters.First(c => c.Equals(chat));
+            var chatUsers = _characters.First(c => c.CompareChat(chat));
             chatUsers.AddCharacter(user, character);
         }
         else
@@ -49,7 +49,7 @@ public static class CharacterManager
     {
         if (HasChat(chat))
         {
-            var chatUserCharacters = _characters.First(c => c.Equals(chat));
+            var chatUserCharacters = _characters.First(c => c.CompareChat(chat));
             return chatUserCharacters.ContainsUser(user);
         }
 
@@ -58,7 +58,7 @@ public static class CharacterManager
 
     private static bool HasChat(Chat chat)
     {
-        return _characters.Any(c => c.Equals(chat));
+        return _characters.Any(c => c.CompareChat(chat));
     }
 
     #endregion

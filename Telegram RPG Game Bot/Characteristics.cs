@@ -10,8 +10,7 @@ public class Characteristics
         _dexterity = new Characteristic("ЛОВ", dexterity);
         _constitution = new Characteristic("ТЕЛ", constitution);
     }
-
-    //[JsonProperty("Strength")] 
+    
     [JsonProperty] 
     private Characteristic _strength;
     

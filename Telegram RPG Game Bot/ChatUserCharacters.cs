@@ -23,14 +23,14 @@ public struct ChatUserCharacters
         _userCharacters.Add(new UserCharacters(user, character));
     }
 
-    public bool Equals(Chat chat)
+    public bool CompareChat(Chat chat)
     {
         return _chat.Id == chat.Id;
     }
 
     public bool ContainsUser(User user)
     {
-        return _userCharacters.Any(u => u.Equals(user));
+        return _userCharacters.Any(u => u.CompareUser(user));
     }
 
     public bool TryGetCharacter(User user, out Character character)
@@ -41,7 +41,7 @@ public struct ChatUserCharacters
             return false;
         }
 
-        character = _userCharacters.Find(p => p.Equals(user)).Character;
+        character = _userCharacters.Find(p => p.CompareUser(user)).Character;
         return character != null;
     }
 }

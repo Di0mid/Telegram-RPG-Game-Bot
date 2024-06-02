@@ -27,7 +27,6 @@ public class Character
     [JsonProperty]
     public int Coins { get; private set; }
     
-    //[JsonProperty("Characteristics")] 
     [JsonProperty] 
     private Characteristics _characteristics;
 
