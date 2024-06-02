@@ -11,7 +11,12 @@ public class Characteristics
         _con = new Characteristic("ТЕЛ", con);
     }
 
-    [JsonProperty] private Characteristic _str;
-    [JsonProperty] private Characteristic _dex;
-    [JsonProperty] private Characteristic _con;
+    [JsonProperty] 
+    private Characteristic _str;
+    
+    [JsonProperty] 
+    private Characteristic _dex;
+    
+    [JsonProperty] 
+    private Characteristic _con;
 }

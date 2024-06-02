@@ -1,4 +1,6 @@
-﻿namespace Telegram_RPG_Game_Bot;
+﻿using Newtonsoft.Json;
+
+namespace Telegram_RPG_Game_Bot;
 
 public class Characteristic
 {
@@ -10,8 +12,13 @@ public class Characteristic
         CalculateModifier();
     }
 
+    [JsonProperty]
     public string Name { get; private set; }
+    
+    [JsonProperty]
     public int Value { get; private set; }
+    
+    [JsonProperty]
     public int Modifier { get; private set; }
 
     private void CalculateModifier()
