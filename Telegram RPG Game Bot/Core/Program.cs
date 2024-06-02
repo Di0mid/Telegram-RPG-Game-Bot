@@ -1,4 +1,4 @@
-﻿namespace Telegram_RPG_Game_Bot
+﻿namespace Telegram_RPG_Game_Bot.Core
 {
     internal class Program
     {
