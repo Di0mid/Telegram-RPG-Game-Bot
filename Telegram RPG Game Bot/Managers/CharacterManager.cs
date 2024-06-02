@@ -7,7 +7,7 @@ namespace Telegram_RPG_Game_Bot.Managers;
 public static class CharacterManager
 {
     private static List<ChatUserCharacters> _characters = new();
-
+  
     public static async void TryCreateCharacter(Chat chat, User user, NewCharacterData characterData)
     {
         if (HasCharacter(chat, user))
@@ -28,6 +28,19 @@ public static class CharacterManager
         }
         
         await Bot.SendTextMessageAsync($"*{character.Name}*, добро пожаловать!");        
+    }
+
+    public static bool TryGetCharacter(Chat chat, User user, out Character character)
+    {
+        if (!HasChat(chat))
+        {
+            character = null;
+            return false;
+        }
+        
+        var chatUserCharacterPair = _characters.Find(p => p.Equals(chat));
+        
+        return chatUserCharacterPair.TryGetCharacter(user, out character);
     }
 
     #region CHECKS

@@ -10,6 +10,7 @@ public class Character
 
         Level = 1;
         Experience = 0;
+        Coins = 100;
 
         _characteristics = new Characteristics(10, 10, 10);
     }
@@ -29,4 +30,16 @@ public class Character
     //[JsonProperty("Characteristics")] 
     [JsonProperty] 
     private Characteristics _characteristics;
+
+    public string MainInfo()
+    {
+        return $"=== *ПЕРСОНАЖ* ====" +
+               $"\n" +
+               $"\n*Имя*: {Name}" +
+               $"\n*Уровень*: {Level}" +
+               $"\n*Опыт*: {Experience}" +
+               $"\n*Монеты*: {Coins}" +
+               $"\n" +
+               $"\n{_characteristics.Info()}";
+    }
 }

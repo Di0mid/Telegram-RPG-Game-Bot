@@ -25,4 +25,9 @@ public class Characteristic
     {
         Modifier = (Value - 10) / 2;
     }
+
+    public string Info()
+    {
+        return $"*{Name}*: {Value}({Modifier})";
+    }
 }

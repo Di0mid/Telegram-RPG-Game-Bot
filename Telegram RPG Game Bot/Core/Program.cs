@@ -50,13 +50,21 @@ namespace Telegram_RPG_Game_Bot.Core
                         CharacterManager.TryCreateCharacter(chat, user,
                             new NewCharacterData(match.Groups["name"].Value));
                     }
+                    else if (text.Equals("мой персонаж", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (CharacterManager.TryGetCharacter(chat, user, out var character))
+                        {
+                            await Bot.SendTextMessageAsync(character.MainInfo());
+                        }
+                    }
                 }
             }
         }
-        
-        private static async Task ErrorHandler(ITelegramBotClient bot, Exception exception, CancellationToken cancellationToken)
+
+        private static async Task ErrorHandler(ITelegramBotClient bot, Exception exception,
+            CancellationToken cancellationToken)
         {
-            Console.WriteLine(exception);
+            Console.WriteLine(exception.Message);
         }
     }
 }

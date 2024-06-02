@@ -15,7 +15,6 @@ public struct UserCharacters
     [JsonProperty]
     private User _user;
 
-    //[JsonProperty("Character")]
     [JsonProperty]
     public readonly Character Character;
 

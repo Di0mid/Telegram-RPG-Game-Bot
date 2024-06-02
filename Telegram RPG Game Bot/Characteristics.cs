@@ -20,4 +20,13 @@ public class Characteristics
     
     [JsonProperty] 
     private Characteristic _constitution;
+
+    public string Info()
+    {
+        return $"=== *ХАРАКТЕРИСТИКИ* ===" +
+               $"\n" +
+               $"\n{_strength.Info()}" +
+               $"\n{_dexterity.Info()}" +
+               $"\n{_constitution.Info()}";
+    }
 }

@@ -11,7 +11,7 @@ public struct ChatUserCharacters
         _chat = chat;
         _userCharacters = userCharacters;
     }
-        
+       
     [JsonProperty]
     private Chat _chat;
     
