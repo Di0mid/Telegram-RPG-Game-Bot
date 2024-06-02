@@ -12,13 +12,13 @@ public struct UserCharacters
         Character = character;
     }
 
-    [JsonProperty("User")]
+    [JsonProperty]
     private User _user;
-    
-    [JsonProperty("Character")]
+
+    [JsonProperty]
     public readonly Character Character;
 
-    public bool Equals(User user)
+    public bool CompareUser(User user)
     {
         return _user.Id == user.Id;
     }

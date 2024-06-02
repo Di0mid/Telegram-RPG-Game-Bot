@@ -7,7 +7,7 @@ namespace Telegram_RPG_Game_Bot.Managers;
 public static class CharacterManager
 {
     private static List<ChatUserCharacters> _characters = new();
-    
+  
     public static async void TryCreateCharacter(Chat chat, User user, NewCharacterData characterData)
     {
         if (HasCharacter(chat, user))
@@ -49,8 +49,8 @@ public static class CharacterManager
     {
         if (HasChat(chat))
         {
-            var chatUserCharacterPair = _characters.First(c => c.Equals(chat));
-            return chatUserCharacterPair.ContainsUser(user);
+            var chatUserCharacters = _characters.First(c => c.Equals(chat));
+            return chatUserCharacters.ContainsUser(user);
         }
 
         return false;

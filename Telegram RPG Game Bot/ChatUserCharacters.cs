@@ -11,11 +11,11 @@ public struct ChatUserCharacters
         _chat = chat;
         _userCharacters = userCharacters;
     }
-        
-    [JsonProperty("Chat")]
+       
+    [JsonProperty]
     private Chat _chat;
     
-    [JsonProperty("UserCharacters")] 
+    [JsonProperty] 
     private List<UserCharacters> _userCharacters;
     
     public void AddCharacter(User user, Character character)

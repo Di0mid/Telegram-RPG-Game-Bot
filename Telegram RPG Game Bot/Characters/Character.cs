@@ -15,19 +15,20 @@ public class Character
         _characteristics = new Characteristics(10, 10, 10);
     }
     
-    [JsonProperty("Name")]
+    [JsonProperty]
     public string Name { get; private set; }
     
-    [JsonProperty("Level")]
+    [JsonProperty]
     public int Level { get; private set; }
     
-    [JsonProperty("Experience")]
+    [JsonProperty]
     public int Experience { get; private set; }
     
-    [JsonProperty("Coins")]
+    [JsonProperty]
     public int Coins { get; private set; }
     
-    [JsonProperty("Characteristics")] 
+    //[JsonProperty("Characteristics")] 
+    [JsonProperty] 
     private Characteristics _characteristics;
 
     public string MainInfo()
