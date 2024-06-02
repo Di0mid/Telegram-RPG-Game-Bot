@@ -7,7 +7,7 @@ using File = Telegram.Bot.Types.File;
 
 namespace Telegram_RPG_Game_Bot.Core;
 
-public class Bot
+public static class Bot
 {
     private static readonly string BotToken = Core.BotToken.Token;
     private static readonly TelegramBotClient BotClient = new(BotToken);
