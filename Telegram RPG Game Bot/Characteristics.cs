@@ -4,19 +4,19 @@ namespace Telegram_RPG_Game_Bot;
 
 public class Characteristics
 {
-    public Characteristics(int str, int dex, int con)
+    public Characteristics(int strength, int dexterity, int constitution)
     {
-        _str = new Characteristic("СИЛ", str);
-        _dex = new Characteristic("ЛОВ", dex);
-        _con = new Characteristic("ТЕЛ", con);
+        _strength = new Characteristic("СИЛ", strength);
+        _dexterity = new Characteristic("ЛОВ", dexterity);
+        _constitution = new Characteristic("ТЕЛ", constitution);
     }
 
-    [JsonProperty] 
-    private Characteristic _str;
+    [JsonProperty("Strength")] 
+    private Characteristic _strength;
     
-    [JsonProperty] 
-    private Characteristic _dex;
+    [JsonProperty("Dexterity")] 
+    private Characteristic _dexterity;
     
-    [JsonProperty] 
-    private Characteristic _con;
+    [JsonProperty("Constitution")] 
+    private Characteristic _constitution;
 }

@@ -12,9 +12,9 @@ public struct UserCharacterPair
         _character = character;
     }
 
-    [JsonProperty]
+    [JsonProperty("User")]
     private User _user;
-    [JsonProperty]
+    [JsonProperty("Character")]
     private Character _character;
 
     public bool CompareUser(User user)

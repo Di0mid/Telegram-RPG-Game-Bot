@@ -5,20 +5,20 @@ namespace Telegram_RPG_Game_Bot;
 
 public struct ChatUserCharacterPair
 {
-    public ChatUserCharacterPair(Chat chat, List<UserCharacterPair> userCharacters)
+    public ChatUserCharacterPair(Chat chat, List<UserCharacterPair> userCharacterPair)
     {
         _chat = chat;
-        _userCharacters = userCharacters;
+        _userCharacterPair = userCharacterPair;
     }
         
-    [JsonProperty]
+    [JsonProperty("Chat")]
     private Chat _chat;
-    [JsonProperty] 
-    private List<UserCharacterPair> _userCharacters;
+    [JsonProperty("UserCharacterPair")] 
+    private List<UserCharacterPair> _userCharacterPair;
 
     public void AddUserCharacterPair(UserCharacterPair userCharacter)
     {
-        _userCharacters.Add(userCharacter);
+        _userCharacterPair.Add(userCharacter);
     }
 
     public bool CompareChat(Chat chat)
@@ -28,6 +28,6 @@ public struct ChatUserCharacterPair
 
     public bool HasUser(User user)
     {
-        return _userCharacters.Any(ucp => ucp.CompareUser(user));
+        return _userCharacterPair.Any(ucp => ucp.CompareUser(user));
     }
 }

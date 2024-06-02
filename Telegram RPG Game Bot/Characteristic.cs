@@ -12,13 +12,13 @@ public class Characteristic
         CalculateModifier();
     }
 
-    [JsonProperty]
+    [JsonProperty("Name")]
     public string Name { get; private set; }
     
-    [JsonProperty]
+    [JsonProperty("Value")]
     public int Value { get; private set; }
     
-    [JsonProperty]
+    [JsonProperty("Modifier")]
     public int Modifier { get; private set; }
 
     private void CalculateModifier()

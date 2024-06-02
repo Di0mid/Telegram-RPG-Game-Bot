@@ -14,18 +14,18 @@ public class Character
         _characteristics = new Characteristics(10, 10, 10);
     }
     
-    [JsonProperty]
+    [JsonProperty("Name")]
     public string Name { get; private set; }
     
-    [JsonProperty]
+    [JsonProperty("Level")]
     public int Level { get; private set; }
     
-    [JsonProperty]
+    [JsonProperty("Experience")]
     public int Experience { get; private set; }
     
-    [JsonProperty]
+    [JsonProperty("Coins")]
     public int Coins { get; private set; }
     
-    [JsonProperty] 
+    [JsonProperty("Characteristics")] 
     private Characteristics _characteristics;
 }
