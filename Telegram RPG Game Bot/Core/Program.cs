@@ -1,10 +1,29 @@
-﻿namespace Telegram_RPG_Game_Bot.Core
+﻿using Telegram.Bot;
+using Telegram.Bot.Types;
+
+namespace Telegram_RPG_Game_Bot.Core
 {
-    internal class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Bot.Start(UpdateHandler, ErrorHandler);
+
+            Console.ReadLine();
+            
+            Bot.Stop();
+
+            Console.ReadLine();
+        }
+
+        private static async Task UpdateHandler(ITelegramBotClient bot, Update update,
+            CancellationToken cancellationToken)
+        {
+        }
+        
+        private static async Task ErrorHandler(ITelegramBotClient bot, Exception exception, CancellationToken cancellationToken)
+        {
+            Console.WriteLine(exception);
         }
     }
 }
