@@ -6,7 +6,7 @@ namespace Telegram_RPG_Game_Bot.Managers;
 
 public static class CharacterManager
 {
-    private static Dictionary<Chat, Dictionary<User, Character>> _characters = new();
+    private static List<ChatUserCharacterPair> _characters = new();
 
     public static async void TryCreateCharacter(Chat chat, User user, NewCharacterData characterData)
     {
@@ -19,11 +19,12 @@ public static class CharacterManager
         var character = new Character(characterData);
         if (HasChat(chat))
         {
-            _characters[chat].Add(user, character);
+            var chatUsers = _characters.First(c => c.CompareChat(chat));
+            chatUsers.AddUserCharacterPair(new UserCharacterPair(user, character));
         }
         else
         {
-            _characters.Add(chat, new Dictionary<User, Character> { { user, character } });
+            _characters.Add(new ChatUserCharacterPair(chat, new List<UserCharacterPair> { new(user, character) }));
         }
         
         await Bot.SendTextMessageAsync($"*{character.Name}*, добро пожаловать!");        
@@ -35,7 +36,8 @@ public static class CharacterManager
     {
         if (HasChat(chat))
         {
-            return _characters[chat].Keys.Any(u => u.Id == user.Id);
+            var chatUserCharacterPair = _characters.First(c => c.CompareChat(chat));
+            return chatUserCharacterPair.HasUser(user);
         }
 
         return false;
@@ -43,8 +45,26 @@ public static class CharacterManager
 
     private static bool HasChat(Chat chat)
     {
-        return _characters.Keys.Any(c => c.Id == chat.Id);
+        return _characters.Any(c => c.CompareChat(chat));
     }
 
+    #endregion
+
+    #region SAVE AND LOAD
+    
+    public static async void SaveCharacters()
+    {
+        await SaveAndLoadManager.Save(_characters, SavePathDatabase.CharactersSavePath, nameof(_characters));
+    }
+
+    public static void LoadCharacters()
+    {
+        var characters = SaveAndLoadManager.Load<List<ChatUserCharacterPair>>(
+            SavePathDatabase.CharactersSavePath, nameof(_characters));
+        
+        if(characters != null)
+            _characters = characters;
+    }
+    
     #endregion
 }

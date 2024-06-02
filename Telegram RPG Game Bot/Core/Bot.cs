@@ -15,7 +15,7 @@ public static class Bot
     private static readonly CancellationToken CancellationToken = CancellationTokenSource.Token;
     private static readonly ReceiverOptions ReceiverOptions = new();
 
-    private static List<Chat> _allChats = new();
+    private static List<Chat> _chats = new();
     private static Chat _currentChat = new();
 
     public static async void Start(Func<ITelegramBotClient, Update, CancellationToken, Task> updateHandler,
@@ -23,6 +23,10 @@ public static class Bot
     {
         Console.WriteLine("=== БОТ ЗАПУЩЕН ===");
 
+        var chats = SaveAndLoadManager.Load<List<Chat>>(SavePathDatabase.ChatsSavePath, nameof(_chats));
+        if (chats != null)
+            _chats = chats;
+        
         await TrySendTextMessageToAllChats("БОТ ЗАПУЩЕН");
 
         BotClient.StartReceiving(
@@ -34,6 +38,8 @@ public static class Bot
 
     public static async void Stop()
     {
+        await SaveAndLoadManager.Save(_chats, SavePathDatabase.ChatsSavePath, nameof(_chats));
+        
         await TrySendTextMessageToAllChats("БОТ ВЫКЛЮЧЕН");
 
         await CancellationTokenSource.CancelAsync();
@@ -103,9 +109,9 @@ public static class Bot
 
     private static async Task TrySendTextMessageToAllChats(string text)
     {
-        if(_allChats.Count > 0)
+        if(_chats.Count > 0)
         {
-            foreach (var chat in _allChats)
+            foreach (var chat in _chats)
             {
                 await SendTextMessageAsync(chat, text);
             }
@@ -114,9 +120,9 @@ public static class Bot
 
     private static void TryAddNewChat(Chat chat)
     {
-        if(_allChats.Any(c => c.Id == chat.Id))
+        if(_chats.Any(c => c.Id == chat.Id))
             return;
             
-        _allChats.Add(chat);
+        _chats.Add(chat);
     }
 }
