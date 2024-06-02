@@ -16,11 +16,6 @@ public static class CharacterManager
             return;
         }
 
-        CreateCharacter(chat, user, characterData);        
-    }
-
-    private static async void CreateCharacter(Chat chat, User user, NewCharacterData characterData)
-    {
         var character = new Character(characterData);
         if (HasChat(chat))
         {
@@ -31,9 +26,9 @@ public static class CharacterManager
             _characters.Add(chat, new Dictionary<User, Character> { { user, character } });
         }
         
-        await Bot.SendTextMessageAsync($"*{character.Name}*, добро пожаловать!");
+        await Bot.SendTextMessageAsync($"*{character.Name}*, добро пожаловать!");        
     }
-    
+
     #region CHECKS
     
     private static bool HasCharacter(Chat chat, User user)

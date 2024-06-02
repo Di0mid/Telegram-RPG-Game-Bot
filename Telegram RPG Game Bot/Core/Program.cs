@@ -10,7 +10,7 @@ namespace Telegram_RPG_Game_Bot.Core
     internal static class Program
     {
         private static readonly Regex CreateCharacterCommand =
-            new(@"^создать\s+персонажа\nимя:\s+(?<name>\w+)$",
+            new(@"^создать\s+персонажа\n\nимя:\s+(?<name>\w+)$",
                 RegexOptions.IgnoreCase);
 
         private static void Main(string[] args)
