@@ -2,8 +2,12 @@
 
 namespace Telegram_RPG_Game_Bot;
 
+[JsonObject(MemberSerialization.OptIn)]
 public class Characteristic
 {
+    [JsonConstructor]
+    private Characteristic(){}
+    
     public Characteristic(string name, int value)
     {
         Name = name;

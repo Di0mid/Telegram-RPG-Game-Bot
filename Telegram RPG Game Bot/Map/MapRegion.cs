@@ -4,8 +4,12 @@ using Telegram_RPG_Game_Bot.Core;
 
 namespace Telegram_RPG_Game_Bot.Map;
 
+[JsonObject(MemberSerialization.OptIn)]
 public class MapRegion
 {
+    [JsonConstructor]
+    private MapRegion() {}
+    
     public MapRegion(Vector2 id)
     {
         Id = id;
@@ -49,7 +53,7 @@ public class MapRegion
                 
                 if (sector.Id == characterOnMapData.SectorId)
                 {
-                    sectors += characterOnMapData.Character.MapIcon;
+                    sectors += characterOnMapData.CharacterMapIcon;
                     continue;
                 }
                 
@@ -61,7 +65,7 @@ public class MapRegion
 
         var region =
             $"== *КАРТА РЕГИОНА ({Id.X + 1}, {Id.Y + 1})* ==" +
-            $"\n========= *{characterOnMapData.Character.Name}* =========" +
+            $"\n========= *{characterOnMapData.CharacterName}* =========" +
             $"\n" +
             $"\n{sectors}";
         
@@ -70,11 +74,11 @@ public class MapRegion
     
     private void GenerateSectors()
     {
-        for (var i = 0; i < _sectors.GetLength(0); i++)
+        for (var y = 0; y < _sectors.GetLength(0); y++)
         {
-            for (var j = 0; j < _sectors.GetLength(1); j++)
+            for (var x = 0; x < _sectors.GetLength(1); x++)
             {
-                _sectors[i, j] = new MapSector(new Vector2(j, i),"🌳");
+                _sectors[y, x] = new MapSector(new Vector2(y, x),"🌳");
             }
         }
     }

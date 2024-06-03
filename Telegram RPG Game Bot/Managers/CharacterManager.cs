@@ -28,7 +28,7 @@ public static class CharacterManager
             _characters.Add(new ChatUserCharacters(chat, new List<UserCharacters> { new(user, character) }));
         }
         
-        MapManager.TryPlaceCharacter(character);
+        MapManager.PlaceCharacter(character);
         await Bot.SendTextMessageAsync($"*{character.Name}*, добро пожаловать!");        
     }
     
@@ -83,11 +83,14 @@ public static class CharacterManager
         if (characters == null) return;
         
         _characters = characters;
+        
+        // TEST
         foreach (var character in _characters.SelectMany(
                      chatUserCharacters => chatUserCharacters.GetAllCharacters()))
         {
-            MapManager.TryPlaceCharacter(character);
+            MapManager.PlaceCharacter(character);
         }
+        // TEST
     }
     
     #endregion

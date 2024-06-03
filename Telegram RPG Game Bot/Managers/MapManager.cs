@@ -6,16 +6,16 @@ namespace Telegram_RPG_Game_Bot.Managers;
 
 public static class MapManager
 {
-    private static GlobalMap _map = new();
+    private static GlobalMap _map = new(3, 3);
 
     public static void MoveCharacter(Character character)
     {
         _map.MoveCharacter(character);
     }
     
-    public static void TryPlaceCharacter(Character character)
+    public static void PlaceCharacter(Character character)
     {
-        _map.TryPlaceCharacter(character);
+        _map.PlaceCharacter(character);
     }
     
     public static void ShowMap(Character character)

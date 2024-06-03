@@ -3,8 +3,10 @@ using Newtonsoft.Json;
 
 namespace Telegram_RPG_Game_Bot.Map;
 
+[JsonObject(MemberSerialization.OptIn)]
 public class MapSector
 {
+    [JsonConstructor]
     public MapSector(Vector2 id, string icon)
     {
         Id = id;

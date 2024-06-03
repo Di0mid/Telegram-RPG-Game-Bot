@@ -2,8 +2,12 @@
 
 namespace Telegram_RPG_Game_Bot.Characters;
 
+[JsonObject(MemberSerialization.OptIn)]
 public class Character
 {
+    [JsonConstructor]
+    private Character() { }
+    
     public Character(int id, NewCharacterData data)
     {
         Id = id;

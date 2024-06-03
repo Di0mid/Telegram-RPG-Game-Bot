@@ -4,13 +4,23 @@ using Telegram_RPG_Game_Bot.Characters;
 
 namespace Telegram_RPG_Game_Bot.Map;
 
+[JsonObject(MemberSerialization.OptIn)]
 public class GlobalMap
 {
+    [JsonConstructor]
+    private GlobalMap(){}
+
+    public GlobalMap(int regionCountX, int regionCountY)
+    {
+        _regions = new MapRegion[regionCountX, regionCountY];
+        _characterOnMapData = new List<CharacterOnMapData>();
+    }
+    
     [JsonProperty]
-    private MapRegion[,] _regions = new MapRegion[3, 3];
+    private MapRegion[,] _regions;
 
     [JsonProperty]
-    private List<CharacterOnMapData> _characterOnMapData = new();
+    private List<CharacterOnMapData> _characterOnMapData;
 
     public void MoveCharacter(Character character)
     {
@@ -24,10 +34,12 @@ public class GlobalMap
         ShowMap(character);
     }
     
-    public void TryPlaceCharacter(Character character)
+    public void PlaceCharacter(Character character)
     {
-        if(_characterOnMapData.Any(map => map.Character.Id == character.Id))
+        // TEST
+        if(_characterOnMapData.Any(map => map.CharacterId == character.Id))
             return;
+        // TEST
         
         var region = GetRandomRegion();
         var sector = region.GetRandomSector();
@@ -37,11 +49,11 @@ public class GlobalMap
     
     public void GenerateMap()
     {
-        for (var i = 0; i < _regions.GetLength(0); i++)
+        for (var y = 0; y < _regions.GetLength(0); y++)
         {
-            for (var j = 0; j < _regions.GetLength(1); j++)
+            for (var x = 0; x < _regions.GetLength(1); x++)
             {
-                _regions[i, j] = new MapRegion(new Vector2(j, i));
+                _regions[y, x] = new MapRegion(new Vector2(y, x));
             }
         }
     }
@@ -68,6 +80,6 @@ public class GlobalMap
 
     private CharacterOnMapData GetCharacterOnMapData(Character character)
     {
-        return _characterOnMapData.First(map => map.Character.Id == character.Id);
+        return _characterOnMapData.First(map => map.CharacterId == character.Id);
     }
 }

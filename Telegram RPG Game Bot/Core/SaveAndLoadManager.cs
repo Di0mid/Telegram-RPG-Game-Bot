@@ -4,6 +4,9 @@ namespace Telegram_RPG_Game_Bot.Core;
 
 public static class SaveAndLoadManager
 {
+    private static readonly JsonSerializerSettings JsonSerializerSettings = new()
+        { ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor };
+    
     public static async Task Save<T>(T saveObject, string savePath, string fileName)
     {
         await File.WriteAllTextAsync(savePath + fileName + ".json",
@@ -17,6 +20,6 @@ public static class SaveAndLoadManager
             return default;
 
         var file = File.ReadAllTextAsync(filePath);
-        return JsonConvert.DeserializeObject<T>(file.Result);
+        return JsonConvert.DeserializeObject<T>(file.Result, JsonSerializerSettings);
     }
 }

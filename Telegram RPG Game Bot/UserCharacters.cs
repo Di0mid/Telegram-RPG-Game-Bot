@@ -4,8 +4,10 @@ using Telegram.Bot.Types;
 
 namespace Telegram_RPG_Game_Bot;
 
+[JsonObject(MemberSerialization.OptIn)]
 public struct UserCharacters
 {
+    [JsonConstructor]
     public UserCharacters(User user, Character character)
     {
         _user = user;
