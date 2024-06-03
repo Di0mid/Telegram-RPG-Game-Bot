@@ -40,7 +40,7 @@ public class GlobalMap
             return;
         
         var characterOnMap = _characterOnMap.First(map => map.CharacterId == character.Id);
-        GetRegion(characterOnMap.RegionId).ShowRegion();
+        GetRegion(characterOnMap.RegionId).ShowRegion(characterOnMap);
     }
 
     private MapRegion GetRandomRegion()

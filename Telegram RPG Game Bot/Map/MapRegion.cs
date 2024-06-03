@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Newtonsoft.Json;
 using Telegram_RPG_Game_Bot.Core;
+using Telegram_RPG_Game_Bot.Managers;
 
 namespace Telegram_RPG_Game_Bot.Map;
 
@@ -25,7 +26,7 @@ public class MapRegion
         return _sectors[random.Next(0, _sectors.GetLength(0)), random.Next(0, _sectors.GetLength(1))];
     }
 
-    public async void ShowRegion()
+    public async void ShowRegion(CharacterOnMap characterOnMap)
     {
         var sectors = "";
         
@@ -33,7 +34,18 @@ public class MapRegion
         {
             for (var j = 0; j < _sectors.GetLength(1); j++)
             {
-                sectors += _sectors[i, j].Icon;
+                var sector = _sectors[i, j];
+                
+                if (sector.Id == characterOnMap.SectorId)
+                {
+                    if (CharacterManager.TryGetCharacter(characterOnMap.CharacterId, out var character))
+                    {
+                        sectors += character.MapIcon;
+                        continue;
+                    }
+                }
+                
+                sectors += sector.Icon;
             }
 
             sectors += "\n";

@@ -7,6 +7,7 @@ public class Character
     public Character(int id, NewCharacterData data)
     {
         Id = id;
+        MapIcon = "🧝";
         
         Name = data.Name;
 
@@ -19,6 +20,9 @@ public class Character
     
     [JsonProperty]
     public int Id { get; private set; }
+    
+    [JsonProperty] 
+    public string MapIcon { get; private set; }
     
     [JsonProperty]
     public string Name { get; private set; }

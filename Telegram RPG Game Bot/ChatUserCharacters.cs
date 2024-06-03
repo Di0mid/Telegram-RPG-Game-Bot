@@ -45,6 +45,12 @@ public struct ChatUserCharacters
         return true;
     }
 
+    public bool TryGetCharacter(int characterId, out Character character)
+    {
+        character = _userCharacters.FirstOrDefault(characters => characters.Character.Id == characterId).Character;
+        return character != null;
+    }
+    
     public List<Character> GetAllCharacters()
     {
         return _userCharacters.Select(userCharacters => userCharacters.Character).ToList();

@@ -39,10 +39,24 @@ public static class CharacterManager
             character = null;
             return false;
         }
-        
+
         var chatUserCharacters = _characters.First(chatUserCharacters => chatUserCharacters.CompareChat(chat));
         
         return chatUserCharacters.TryGetCharacter(user, out character);
+    }
+
+    public static bool TryGetCharacter(int characterId, out Character character)
+    {
+        foreach (var chatUserCharacters in _characters)
+        {
+            if (chatUserCharacters.TryGetCharacter(characterId, out character))
+            {
+                return true;
+            }
+        }
+
+        character = null;
+        return false;
     }
     
     #region CHECKS
