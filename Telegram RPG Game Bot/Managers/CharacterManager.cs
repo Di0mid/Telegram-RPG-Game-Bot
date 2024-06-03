@@ -6,16 +6,21 @@ namespace Telegram_RPG_Game_Bot.Managers;
 
 public static class CharacterManager
 {
+    
+    // TODO: Поработать над названием листа
     private static List<ChatUserCharacters> _characters = new();
   
+    
     public static async void TryCreateCharacter(Chat chat, User user, NewCharacterData characterData)
     {
+        
         if (HasCharacter(chat, user))
         {
             await Bot.SendTextMessageAsync($"@{user.Username}, у тебя уже есть персонаж");
             return;
         }
 
+        
         var character = new Character(characterData);
         if (HasChat(chat))
         {
@@ -30,6 +35,8 @@ public static class CharacterManager
         await Bot.SendTextMessageAsync($"*{character.Name}*, добро пожаловать!");        
     }
 
+    
+    
     public static bool TryGetCharacter(Chat chat, User user, out Character character)
     {
         if (!HasChat(chat))
@@ -38,24 +45,29 @@ public static class CharacterManager
             return false;
         }
         
-        var chatUserCharacterPair = _characters.Find(p => p.CompareChat(chat));
+        var chatUserCharacters = _characters.First(chatUserCharacters => chatUserCharacters.CompareChat(chat));
         
-        return chatUserCharacterPair.TryGetCharacter(user, out character);
+        return chatUserCharacters.TryGetCharacter(user, out character);
     }
 
+    
+    
     #region CHECKS
     
     private static bool HasCharacter(Chat chat, User user)
     {
+        
         if (HasChat(chat))
         {
-            var chatUserCharacters = _characters.First(c => c.CompareChat(chat));
-            return chatUserCharacters.ContainsUser(user);
+            var chatUserCharacters = _characters.First(chatUserCharacters => chatUserCharacters.CompareChat(chat));
+            return chatUserCharacters.HasUser(user);
         }
 
         return false;
     }
 
+    
+    // TODO: Улучшить логику метода
     private static bool HasChat(Chat chat)
     {
         return _characters.Any(c => c.CompareChat(chat));

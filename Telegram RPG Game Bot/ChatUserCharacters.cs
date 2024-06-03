@@ -28,14 +28,20 @@ public struct ChatUserCharacters
         return _chat.Id == chat.Id;
     }
 
-    public bool ContainsUser(User user)
+    public bool HasUser(User user)
     {
-        return _userCharacters.Any(u => u.CompareUser(user));
+        return _userCharacters.Any(userCharacters => userCharacters.CompareUser(user));
     }
 
     public bool TryGetCharacter(User user, out Character character)
     {
-        character = _userCharacters.Find(p => p.CompareUser(user)).Character;
-        return character != null;
+        if (!HasUser(user))
+        {
+            character = null;
+            return false;
+        }
+        
+        character = _userCharacters.First(userCharacters => userCharacters.CompareUser(user)).Character;
+        return true;
     }
 }

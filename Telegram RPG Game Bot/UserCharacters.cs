@@ -16,7 +16,7 @@ public struct UserCharacters
     private User _user;
     
     [JsonProperty]
-    public readonly Character Character;
+    public Character Character { get; private set; }
 
     public bool CompareUser(User user)
     {
