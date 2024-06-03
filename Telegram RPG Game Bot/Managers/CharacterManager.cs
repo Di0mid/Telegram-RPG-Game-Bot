@@ -28,7 +28,7 @@ public static class CharacterManager
             _characters.Add(new ChatUserCharacters(chat, new List<UserCharacters> { new(user, character) }));
         }
         
-        MapManager.TryPlaceCharacter(character.Id);
+        MapManager.TryPlaceCharacter(character);
         await Bot.SendTextMessageAsync($"*{character.Name}*, добро пожаловать!");        
     }
     
@@ -45,20 +45,6 @@ public static class CharacterManager
         return chatUserCharacters.TryGetCharacter(user, out character);
     }
 
-    public static bool TryGetCharacter(int characterId, out Character character)
-    {
-        foreach (var chatUserCharacters in _characters)
-        {
-            if (chatUserCharacters.TryGetCharacter(characterId, out character))
-            {
-                return true;
-            }
-        }
-
-        character = null;
-        return false;
-    }
-    
     #region CHECKS
     
     private static bool HasCharacter(Chat chat, User user)
@@ -100,7 +86,7 @@ public static class CharacterManager
         foreach (var character in _characters.SelectMany(
                      chatUserCharacters => chatUserCharacters.GetAllCharacters()))
         {
-            MapManager.TryPlaceCharacter(character.Id);
+            MapManager.TryPlaceCharacter(character);
         }
     }
     

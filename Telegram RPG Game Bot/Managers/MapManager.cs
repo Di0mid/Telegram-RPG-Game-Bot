@@ -8,9 +8,14 @@ public static class MapManager
 {
     private static GlobalMap _map = new();
 
-    public static void TryPlaceCharacter(int characterId)
+    public static void MoveCharacter(Character character)
     {
-        _map.TryPlaceCharacter(characterId);
+        _map.MoveCharacter(character);
+    }
+    
+    public static void TryPlaceCharacter(Character character)
+    {
+        _map.TryPlaceCharacter(character);
     }
     
     public static void ShowMap(Character character)

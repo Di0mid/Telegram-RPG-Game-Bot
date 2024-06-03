@@ -66,6 +66,13 @@ namespace Telegram_RPG_Game_Bot.Core
                             MapManager.ShowMap(character);
                         }
                     }
+                    else if (text.Equals("на север", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (CharacterManager.TryGetCharacter(chat, user, out var character))
+                        {
+                            MapManager.MoveCharacter(character);
+                        }
+                    }
                 }
             }
         }

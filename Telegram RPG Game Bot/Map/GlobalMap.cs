@@ -10,17 +10,29 @@ public class GlobalMap
     private MapRegion[,] _regions = new MapRegion[3, 3];
 
     [JsonProperty]
-    private List<CharacterOnMap> _characterOnMap = new();
+    private List<CharacterOnMapData> _characterOnMapData = new();
 
-    public void TryPlaceCharacter(int characterId)
+    public void MoveCharacter(Character character)
     {
-        if(_characterOnMap.Any(map => map.CharacterId == characterId))
+        var characterOnMapData = GetCharacterOnMapData(character);
+
+        var nextSectorId = characterOnMapData.SectorId - new Vector2(1, 0);
+        if (!GetRegion(characterOnMapData.RegionId).TryGetSector(nextSectorId, out var sector)) 
+            return;
+        
+        characterOnMapData.UpdateSectorId(sector.Id);
+        ShowMap(character);
+    }
+    
+    public void TryPlaceCharacter(Character character)
+    {
+        if(_characterOnMapData.Any(map => map.Character.Id == character.Id))
             return;
         
         var region = GetRandomRegion();
         var sector = region.GetRandomSector();
         
-        _characterOnMap.Add(new CharacterOnMap(characterId, region.Id, sector.Id));
+        _characterOnMapData.Add(new CharacterOnMapData(character, region.Id, sector.Id));
     }
     
     public void GenerateMap()
@@ -29,18 +41,18 @@ public class GlobalMap
         {
             for (var j = 0; j < _regions.GetLength(1); j++)
             {
-                _regions[i, j] = new MapRegion(new Vector2(i, j));
+                _regions[i, j] = new MapRegion(new Vector2(j, i));
             }
         }
     }
 
     public void ShowMap(Character character)
     {
-        if(_characterOnMap.Count == 0)
+        if(_characterOnMapData.Count == 0)
             return;
-        
-        var characterOnMap = _characterOnMap.First(map => map.CharacterId == character.Id);
-        GetRegion(characterOnMap.RegionId).ShowRegion(characterOnMap);
+
+        var characterOnMapData = GetCharacterOnMapData(character);
+        GetRegion(characterOnMapData.RegionId).ShowRegion(characterOnMapData);
     }
 
     private MapRegion GetRandomRegion()
@@ -52,5 +64,10 @@ public class GlobalMap
     private MapRegion GetRegion(Vector2 id)
     {
         return _regions[(int)id.X, (int)id.Y];
+    }
+
+    private CharacterOnMapData GetCharacterOnMapData(Character character)
+    {
+        return _characterOnMapData.First(map => map.Character.Id == character.Id);
     }
 }

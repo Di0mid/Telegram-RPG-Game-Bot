@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using Newtonsoft.Json;
 using Telegram_RPG_Game_Bot.Core;
-using Telegram_RPG_Game_Bot.Managers;
 
 namespace Telegram_RPG_Game_Bot.Map;
 
@@ -26,7 +25,19 @@ public class MapRegion
         return _sectors[random.Next(0, _sectors.GetLength(0)), random.Next(0, _sectors.GetLength(1))];
     }
 
-    public async void ShowRegion(CharacterOnMap characterOnMap)
+    public bool TryGetSector(Vector2 id, out MapSector sector)
+    {
+        if (id.X > _sectors.GetLength(0) || id.Y > _sectors.GetLength(1))
+        {
+            sector = null;
+            return false;
+        }
+
+        sector = _sectors[(int)id.X, (int)id.Y];
+        return true;
+    }
+    
+    public async void ShowRegion(CharacterOnMapData characterOnMapData)
     {
         var sectors = "";
         
@@ -36,13 +47,10 @@ public class MapRegion
             {
                 var sector = _sectors[i, j];
                 
-                if (sector.Id == characterOnMap.SectorId)
+                if (sector.Id == characterOnMapData.SectorId)
                 {
-                    if (CharacterManager.TryGetCharacter(characterOnMap.CharacterId, out var character))
-                    {
-                        sectors += character.MapIcon;
-                        continue;
-                    }
+                    sectors += characterOnMapData.Character.MapIcon;
+                    continue;
                 }
                 
                 sectors += sector.Icon;
@@ -52,8 +60,9 @@ public class MapRegion
         }
 
         var region =
-            "==== *КАРТА РЕГИОНА* ====" +
-            $"\n========== *{Id.X + 1}, {Id.Y + 1}* ==========" +
+            $"== *КАРТА РЕГИОНА ({Id.X + 1}, {Id.Y + 1})* ==" +
+            $"\n========= *{characterOnMapData.Character.Name}* =========" +
+            $"\n" +
             $"\n{sectors}";
         
         await Bot.SendTextMessageAsync(region);
@@ -65,7 +74,7 @@ public class MapRegion
         {
             for (var j = 0; j < _sectors.GetLength(1); j++)
             {
-                _sectors[i, j] = new MapSector(new Vector2(i, j),"🌳");
+                _sectors[i, j] = new MapSector(new Vector2(j, i),"🌳");
             }
         }
     }
