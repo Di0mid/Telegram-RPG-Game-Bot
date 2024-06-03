@@ -44,4 +44,9 @@ public struct ChatUserCharacters
         character = _userCharacters.First(userCharacters => userCharacters.CompareUser(user)).Character;
         return true;
     }
+
+    public List<Character> GetAllCharacters()
+    {
+        return _userCharacters.Select(userCharacters => userCharacters.Character).ToList();
+    }
 }

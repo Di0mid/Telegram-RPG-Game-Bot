@@ -6,22 +6,18 @@ namespace Telegram_RPG_Game_Bot.Managers;
 
 public static class CharacterManager
 {
-    
     // TODO: Поработать над названием листа
     private static List<ChatUserCharacters> _characters = new();
-  
     
     public static async void TryCreateCharacter(Chat chat, User user, NewCharacterData characterData)
     {
-        
         if (HasCharacter(chat, user))
         {
             await Bot.SendTextMessageAsync($"@{user.Username}, у тебя уже есть персонаж");
             return;
         }
-
         
-        var character = new Character(characterData);
+        var character = new Character(_characters.Count + 1, characterData);
         if (HasChat(chat))
         {
             var chatUsers = _characters.First(c => c.CompareChat(chat));
@@ -32,10 +28,9 @@ public static class CharacterManager
             _characters.Add(new ChatUserCharacters(chat, new List<UserCharacters> { new(user, character) }));
         }
         
+        MapManager.TryPlaceCharacter(character.Id);
         await Bot.SendTextMessageAsync($"*{character.Name}*, добро пожаловать!");        
     }
-
-    
     
     public static bool TryGetCharacter(Chat chat, User user, out Character character)
     {
@@ -49,8 +44,6 @@ public static class CharacterManager
         
         return chatUserCharacters.TryGetCharacter(user, out character);
     }
-
-    
     
     #region CHECKS
     
@@ -86,9 +79,15 @@ public static class CharacterManager
     {
         var characters = SaveAndLoadManager.Load<List<ChatUserCharacters>>(
             SavePathDatabase.CharactersSavePath, nameof(_characters));
+
+        if (characters == null) return;
         
-        if(characters != null)
-            _characters = characters;
+        _characters = characters;
+        foreach (var character in _characters.SelectMany(
+                     chatUserCharacters => chatUserCharacters.GetAllCharacters()))
+        {
+            MapManager.TryPlaceCharacter(character.Id);
+        }
     }
     
     #endregion

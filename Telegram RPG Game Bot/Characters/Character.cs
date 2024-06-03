@@ -4,8 +4,10 @@ namespace Telegram_RPG_Game_Bot.Characters;
 
 public class Character
 {
-    public Character(NewCharacterData data)
+    public Character(int id, NewCharacterData data)
     {
+        Id = id;
+        
         Name = data.Name;
 
         Level = 1;
@@ -14,6 +16,9 @@ public class Character
 
         _characteristics = new Characteristics(10, 10, 10);
     }
+    
+    [JsonProperty]
+    public int Id { get; private set; }
     
     [JsonProperty]
     public string Name { get; private set; }

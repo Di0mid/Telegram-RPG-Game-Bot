@@ -15,6 +15,7 @@ namespace Telegram_RPG_Game_Bot.Core
 
         private static void Main(string[] args)
         {
+            MapManager.GenerateOrLoadMap();
             CharacterManager.LoadCharacters();
             
             Bot.Start(UpdateHandler, ErrorHandler);
@@ -22,6 +23,7 @@ namespace Telegram_RPG_Game_Bot.Core
             Console.ReadLine();
             
             CharacterManager.SaveCharacters();
+            MapManager.SaveMap();
             
             Bot.Stop();
 
@@ -55,6 +57,13 @@ namespace Telegram_RPG_Game_Bot.Core
                         if (CharacterManager.TryGetCharacter(chat, user, out var character))
                         {
                             await Bot.SendTextMessageAsync(character.MainInfo());
+                        }
+                    }
+                    else if (text.Equals("карта", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (CharacterManager.TryGetCharacter(chat, user, out var character))
+                        {
+                            MapManager.ShowMap(character);
                         }
                     }
                 }
