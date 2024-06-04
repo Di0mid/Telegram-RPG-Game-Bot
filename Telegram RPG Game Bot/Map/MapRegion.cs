@@ -31,7 +31,8 @@ public class MapRegion
 
     public bool TryGetSector(Vector2 id, out MapSector sector)
     {
-        if (id.X > _sectors.GetLength(0) - 1 || id.Y > _sectors.GetLength(1) - 1)
+        if ((id.X > _sectors.GetLength(0) - 1 || id.X < 0) || 
+            (id.Y > _sectors.GetLength(1) - 1 || id.Y < 0))
         {
             sector = null;
             return false;
@@ -64,7 +65,7 @@ public class MapRegion
         }
 
         var region =
-            $"== *КАРТА РЕГИОНА ({Id.X + 1}, {Id.Y + 1})* ==" +
+            $"== *КАРТА РЕГИОНА ({Id.X}, {Id.Y})* ==" +
             $"\n========= *{characterOnMapData.CharacterName}* =========" +
             $"\n" +
             $"\n{sectors}";

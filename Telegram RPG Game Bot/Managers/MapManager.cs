@@ -11,7 +11,7 @@ public static class MapManager
 
     public static void MoveCharacter(Character character, Vector2 direction, int stepCount)
     {
-        _map.MoveCharacter(character, direction * stepCount);
+        _map.MoveCharacter(character, direction, stepCount);
     }
     
     public static void PlaceCharacter(Character character)

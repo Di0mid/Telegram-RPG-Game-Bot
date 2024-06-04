@@ -28,12 +28,7 @@ public class CharacterOnMapData
     public string CharacterName { get; private set; }
 
     [JsonProperty]
-    public Vector2 RegionId { get; private set; }
+    public Vector2 RegionId { get; set; }
     [JsonProperty]
-    public Vector2 SectorId { get; private set; }
-
-    public void UpdateSectorId(Vector2 id)
-    {
-        SectorId = id;
-    }
+    public Vector2 SectorId { get; set; }
 }
