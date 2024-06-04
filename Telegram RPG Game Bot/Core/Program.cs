@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Telegram_RPG_Game_Bot.Characters;
 using Telegram_RPG_Game_Bot.Managers;
+using Telegram_RPG_Game_Bot.Map;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -10,8 +11,11 @@ namespace Telegram_RPG_Game_Bot.Core
     internal static class Program
     {
         private static readonly Regex CreateCharacterCommand =
-            new(@"^создать\s+персонажа\nимя:\s+(?<name>\w+)$",
+            new(@"^создать\s+персонажа\s+\nимя:\s+(?<name>\w+)\s*$",
                 RegexOptions.IgnoreCase);
+
+        private static readonly Regex MoveOnMapCommand =
+            new(@"^на\s+(?<direction>((\w+)|(\w+-\w+)))\s+(?<stepCount>\d+)\s*$", RegexOptions.IgnoreCase);
 
         private static void Main(string[] args)
         {
@@ -55,23 +59,29 @@ namespace Telegram_RPG_Game_Bot.Core
                     else if (text.Equals("мой персонаж", StringComparison.OrdinalIgnoreCase))
                     {
                         if (CharacterManager.TryGetCharacter(chat, user, out var character))
-                        {
-                            await Bot.SendTextMessageAsync(character.MainInfo());
-                        }
+                            return;
+
+                        await Bot.SendTextMessageAsync(character.MainInfo());
                     }
                     else if (text.Equals("карта", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (CharacterManager.TryGetCharacter(chat, user, out var character))
-                        {
-                            MapManager.ShowMap(character);
-                        }
+                        if (!CharacterManager.TryGetCharacter(chat, user, out var character))
+                            return;
+
+                        MapManager.ShowMap(character);
                     }
-                    else if (text.Equals("на север", StringComparison.OrdinalIgnoreCase))
+                    else if (MoveOnMapCommand.Match(text).Success)
                     {
-                        if (CharacterManager.TryGetCharacter(chat, user, out var character))
-                        {
-                            MapManager.MoveCharacter(character);
-                        }
+                        match = MoveOnMapCommand.Match(text);
+                        
+                        if (!CharacterManager.TryGetCharacter(chat, user, out var character))
+                            return;
+                        
+                        if (!MapMovementDirectionMapping.TryGetMovementDirection(match.Groups["direction"].Value,
+                                out var direction))
+                            return;
+
+                        MapManager.MoveCharacter(character, direction, int.Parse(match.Groups["stepCount"].Value));
                     }
                 }
             }

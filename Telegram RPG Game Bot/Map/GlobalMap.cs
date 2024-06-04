@@ -22,16 +22,16 @@ public class GlobalMap
     [JsonProperty]
     private List<CharacterOnMapData> _characterOnMapData;
 
-    public void MoveCharacter(Character character)
+    public void MoveCharacter(Character character, Vector2 movementDirection)
     {
         var characterOnMapData = GetCharacterOnMapData(character);
 
-        var nextSectorId = characterOnMapData.SectorId - new Vector2(1, 0);
+        var nextSectorId = characterOnMapData.SectorId + movementDirection;
         if (!GetRegion(characterOnMapData.RegionId).TryGetSector(nextSectorId, out var sector)) 
             return;
         
         characterOnMapData.UpdateSectorId(sector.Id);
-        ShowMap(character);
+        ShowMap(characterOnMapData);
     }
     
     public void PlaceCharacter(Character character)
@@ -64,9 +64,14 @@ public class GlobalMap
             return;
 
         var characterOnMapData = GetCharacterOnMapData(character);
-        GetRegion(characterOnMapData.RegionId).ShowRegion(characterOnMapData);
+        ShowMap(characterOnMapData);
     }
 
+    private void ShowMap(CharacterOnMapData characterOnMapData)
+    {
+        GetRegion(characterOnMapData.RegionId).ShowRegion(characterOnMapData);
+    }
+    
     private MapRegion GetRandomRegion()
     {
         var random = new Random();

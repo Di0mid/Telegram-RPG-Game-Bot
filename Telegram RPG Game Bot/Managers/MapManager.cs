@@ -1,4 +1,5 @@
-﻿using Telegram_RPG_Game_Bot.Characters;
+﻿using System.Numerics;
+using Telegram_RPG_Game_Bot.Characters;
 using Telegram_RPG_Game_Bot.Core;
 using Telegram_RPG_Game_Bot.Map;
 
@@ -8,9 +9,9 @@ public static class MapManager
 {
     private static GlobalMap _map = new(3, 3);
 
-    public static void MoveCharacter(Character character)
+    public static void MoveCharacter(Character character, Vector2 direction, int stepCount)
     {
-        _map.MoveCharacter(character);
+        _map.MoveCharacter(character, direction * stepCount);
     }
     
     public static void PlaceCharacter(Character character)

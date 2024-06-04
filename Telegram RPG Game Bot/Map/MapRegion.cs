@@ -31,7 +31,7 @@ public class MapRegion
 
     public bool TryGetSector(Vector2 id, out MapSector sector)
     {
-        if (id.X > _sectors.GetLength(0) || id.Y > _sectors.GetLength(1))
+        if (id.X > _sectors.GetLength(0) - 1 || id.Y > _sectors.GetLength(1) - 1)
         {
             sector = null;
             return false;
