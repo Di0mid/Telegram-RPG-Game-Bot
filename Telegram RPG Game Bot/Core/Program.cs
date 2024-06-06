@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Telegram_RPG_Game_Bot.Characters;
+using Telegram_RPG_Game_Bot.Command;
 using Telegram_RPG_Game_Bot.Managers;
 using Telegram_RPG_Game_Bot.Map;
 using Telegram.Bot;
@@ -10,13 +11,6 @@ namespace Telegram_RPG_Game_Bot.Core
 {
     internal static class Program
     {
-        private static readonly Regex CreateCharacterCommand =
-            new(@"^создать\s+персонажа\s+\nимя:\s+(?<name>\w+)\s*$",
-                RegexOptions.IgnoreCase);
-
-        private static readonly Regex MoveOnMapCommand =
-            new(@"^на\s+(?<direction>((\w+)|(\w+-\w+)))\s+(?<stepCount>\d+)\s*$", RegexOptions.IgnoreCase);
-
         private static void Main(string[] args)
         {
             MapManager.GenerateOrLoad();
@@ -49,7 +43,9 @@ namespace Telegram_RPG_Game_Bot.Core
                 {
                     var text = message.Text;
                     
-                    var match = CreateCharacterCommand.Match(text);
+                    CommandHandler.Handle(text, chat, user);
+                    
+                    /*var match = CreateCharacterCommand.Match(text);
 
                     if (match.Success)
                     {
@@ -58,7 +54,7 @@ namespace Telegram_RPG_Game_Bot.Core
                     }
                     else if (text.Equals("мой персонаж", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (CharacterManager.TryGetCharacter(chat, user, out var character))
+                        if (!CharacterManager.TryGetCharacter(chat, user, out var character))
                             return;
 
                         await Bot.SendTextMessageAsync(character.MainInfo());
@@ -89,7 +85,7 @@ namespace Telegram_RPG_Game_Bot.Core
                             return;
 
                         MapManager.MoveCharacter(character, direction, int.Parse(match.Groups["stepCount"].Value));
-                    }
+                    }*/
                 }
             }
         }
