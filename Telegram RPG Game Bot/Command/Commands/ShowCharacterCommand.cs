@@ -5,10 +5,10 @@ using Telegram.Bot.Types;
 
 namespace Telegram_RPG_Game_Bot.Command.Commands;
 
-public class ShowMyCharacterCommand : CommandBase
+public class ShowCharacterCommand : CommandBase
 {
     protected override Regex CommandPattern { get; set; } =
-        new(@"^мой\s+перонаж\s*$", RegexOptions.IgnoreCase);
+        new(@"^мой\s+персонаж\s*$", RegexOptions.IgnoreCase);
 
     public override async void Execute(Chat chat, User user)
     {

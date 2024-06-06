@@ -25,6 +25,12 @@ public class Characteristic
     [JsonProperty]
     public int Modifier { get; private set; }
 
+    public void LevelUp()
+    {
+        Value++;
+        CalculateModifier();
+    }
+
     private void CalculateModifier()
     {
         Modifier = (Value - 10) / 2;
@@ -32,6 +38,6 @@ public class Characteristic
 
     public string Info()
     {
-        return $"*{Name}*: {Value}({Modifier})";
+        return $"*{Name.ToUpper()}*: {Value}({Modifier})";
     }
 }

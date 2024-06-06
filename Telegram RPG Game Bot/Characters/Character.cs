@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Telegram_RPG_Game_Bot.Core;
 
 namespace Telegram_RPG_Game_Bot.Characters;
 
@@ -31,18 +32,36 @@ public class Character
     [JsonProperty]
     public string Name { get; private set; }
     
+    #region LEVEL
+    
     [JsonProperty]
     public int Level { get; private set; }
     
     [JsonProperty]
     public int Experience { get; private set; }
     
+    #endregion
+    
     [JsonProperty]
     public int Coins { get; private set; }
-    
+
+    #region CHARACTERISTICS
+
     [JsonProperty] 
     private Characteristics _characteristics;
 
+    public async void TryLevelUpCharacteristic(string characteristicName)
+    {
+        await Bot.SendTextMessageAsync($"{Name}, {_characteristics.TryLevelUp(characteristicName)}");
+    }
+    
+    public string CharacteristicsInfo()
+    {
+        return _characteristics.Info();
+    }
+    
+    #endregion
+    
     public string MainInfo()
     {
         return $"=== *ПЕРСОНАЖ* ====" +
@@ -50,8 +69,6 @@ public class Character
                $"\n*Имя*: {Name}" +
                $"\n*Уровень*: {Level}" +
                $"\n*Опыт*: {Experience}" +
-               $"\n*Монеты*: {Coins}" +
-               $"\n" +
-               $"\n{_characteristics.Info()}";
+               $"\n*Монеты*: {Coins}";
     }
 }

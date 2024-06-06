@@ -7,11 +7,13 @@ public static class CommandHandler
 {
     private static readonly HashSet<CommandBase> Commands = new()
     {
+        new CharacteristicLevelUpCommand(),
         new CreateCharacterCommand(),
         new MoveOnMapCommand(),
+        new ShowCharacterCommand(),
+        new ShowCharacteristicsCommand(),
         new ShowMapCommand(),
         new ShowMapSectorInfoCommand(),
-        new ShowMyCharacterCommand(),
     };
 
     public static void Handle(string text, Chat chat, User user)
