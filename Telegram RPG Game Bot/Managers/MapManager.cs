@@ -23,7 +23,7 @@ public static class MapManager
             if (region.TryGetSector(nextSectorId, out var nextSector))
             {
                 data.SectorId = nextSector.Id;
-                DiscoverSectorsOnWay(direction, currentSectorId, nextSectorId, data);
+                FogOfWarManager.DiscoverSectorsOnWay(_map, direction, currentSectorId, nextSectorId, data);
             }
             else
             {
@@ -38,7 +38,7 @@ public static class MapManager
                     return;
             
                 data.SectorId = nextSector.Id;
-                DiscoverSectorsOnWay(direction, currentSectorId, nextSectorId, data);
+                FogOfWarManager.DiscoverSectorsOnWay(_map, direction, currentSectorId, nextSectorId, data);
             }
         }
         
@@ -58,7 +58,7 @@ public static class MapManager
         var data = new CharacterOnMapData(character, region.Id, sector.Id);
         _characterOnMapData.Add(data);
         
-        DiscoverSectorsAroundCharacter(data);
+        FogOfWarManager.DiscoverSectorsAroundCharacter(_map, data);
     }
     
     public static void ShowMapRegion(Character character)
@@ -76,45 +76,6 @@ public static class MapManager
         return _characterOnMapData.First(map => map.CharacterId == character.Id);
     }
 
-    private static void DiscoverSectorsOnWay(Vector2 direction, Vector2 startSectorId, Vector2 endSectorId,
-        CharacterOnMapData data)
-    {
-        var region = _map.GetRegion(data.RegionId);
-        
-        var currentSectorId = startSectorId;
-        while (currentSectorId != endSectorId)
-        {
-            currentSectorId += direction;
-            DiscoverSectorsAround(currentSectorId, region);
-        }
-    }
-
-    private static void DiscoverSectorsAroundCharacter(CharacterOnMapData data)
-    {
-        var currentRegion = _map.GetRegion(data.RegionId);
-        var currentSector = currentRegion.GetSector(data.SectorId);
-
-        DiscoverSectorsAround(currentSector.Id, currentRegion);
-    }
-
-    private static void DiscoverSectorsAround(Vector2 centerSectorId, MapRegion region)
-    {
-        for (var y = -1; y <= 1; y++)
-        {
-            for (var x = -1; x <= 1; x++)
-            {
-                var id = centerSectorId + new Vector2(y, x);
-                if (!region.TryGetSector(id, out var sector)) 
-                    continue;
-                
-                if (sector.IsDiscovered)
-                    continue;
-
-                sector.Discover();
-            }
-        }
-    }
-    
     #region SAVE AND LOAD
     
     public static async void Save()
