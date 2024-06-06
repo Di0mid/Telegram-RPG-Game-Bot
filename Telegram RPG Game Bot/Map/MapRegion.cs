@@ -1,6 +1,8 @@
 ﻿using System.Numerics;
 using Newtonsoft.Json;
 using Telegram_RPG_Game_Bot.Core;
+using Telegram_RPG_Game_Bot.Database;
+using Telegram_RPG_Game_Bot.Map.Sector;
 
 namespace Telegram_RPG_Game_Bot.Map;
 
@@ -38,8 +40,13 @@ public class MapRegion
             return false;
         }
 
-        sector = _sectors[(int)id.X, (int)id.Y];
+        sector = GetSector(id);
         return true;
+    }
+
+    public MapSector GetSector(Vector2 id)
+    {
+        return _sectors[(int)id.X, (int)id.Y];
     }
     
     public async void ShowRegion(CharacterOnMapData characterOnMapData)
@@ -79,7 +86,19 @@ public class MapRegion
         {
             for (var x = 0; x < _sectors.GetLength(1); x++)
             {
-                _sectors[y, x] = new MapSector(new Vector2(y, x),"🌳");
+                //TEST
+                var random = new Random();
+                if (random.Next(1, 10) <= 5)
+                {
+                    _sectors[y, x] = new MapSector(new Vector2(y, x), MapSectorDatabase.Forest);
+                }
+                else
+                {
+                    _sectors[y, x] = new MapSector(new Vector2(y, x), MapSectorDatabase.Plain);
+                }
+                //TEST
+                
+                //_sectors[y, x] = new MapSector(new Vector2(y, x), MapSectorDatabase.Forest);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Telegram_RPG_Game_Bot.Characters;
 using Telegram_RPG_Game_Bot.Core;
+using Telegram_RPG_Game_Bot.Database;
 using Telegram.Bot.Types;
 
 namespace Telegram_RPG_Game_Bot.Managers;

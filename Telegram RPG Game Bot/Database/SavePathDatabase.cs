@@ -1,4 +1,4 @@
-﻿namespace Telegram_RPG_Game_Bot.Core;
+﻿namespace Telegram_RPG_Game_Bot.Database;
 
 public static class SavePathDatabase
 {

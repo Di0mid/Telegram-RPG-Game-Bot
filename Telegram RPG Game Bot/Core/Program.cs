@@ -70,6 +70,13 @@ namespace Telegram_RPG_Game_Bot.Core
 
                         MapManager.ShowMap(character);
                     }
+                    else if (text.Equals("о секторе", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (!CharacterManager.TryGetCharacter(chat, user, out var character))
+                            return;
+
+                        MapManager.ShowSectorInfo(character);
+                    }
                     else if (MoveOnMapCommand.Match(text).Success)
                     {
                         match = MoveOnMapCommand.Match(text);

@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Newtonsoft.Json;
 using Telegram_RPG_Game_Bot.Characters;
+using Telegram_RPG_Game_Bot.Core;
 
 namespace Telegram_RPG_Game_Bot.Map;
 
@@ -22,6 +23,8 @@ public class GlobalMap
     [JsonProperty]
     private List<CharacterOnMapData> _characterOnMapData;
 
+    
+    
     public void MoveCharacter(Character character, Vector2 movementDirection, int stepCount)
     {
         var characterOnMapData = GetCharacterOnMapData(character);
@@ -78,6 +81,15 @@ public class GlobalMap
         }
     }
 
+    public async void ShowSectorInfo(Character character)
+    {
+        var characterOnMapData = GetCharacterOnMapData(character);
+        var region = GetRegion(characterOnMapData.RegionId);
+        var sector = region.GetSector(characterOnMapData.SectorId);
+        
+        await Bot.SendTextMessageAsync(sector.Info());
+    }
+    
     public void ShowMap(Character character)
     {
         if(_characterOnMapData.Count == 0)
@@ -110,8 +122,13 @@ public class GlobalMap
             return false;
         }
 
-        region = _regions[(int)id.X, (int)id.Y];
+        region = GetRegion(id);
         return true;
+    }
+
+    private MapRegion GetRegion(Vector2 id)
+    {
+        return _regions[(int)id.X, (int)id.Y];
     }
 
     private CharacterOnMapData GetCharacterOnMapData(Character character)

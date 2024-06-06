@@ -1,4 +1,5 @@
-﻿using Telegram.Bot;
+﻿using Telegram_RPG_Game_Bot.Database;
+using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;

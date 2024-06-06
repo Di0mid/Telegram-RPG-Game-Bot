@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Telegram_RPG_Game_Bot.Characters;
 using Telegram_RPG_Game_Bot.Core;
+using Telegram_RPG_Game_Bot.Database;
 using Telegram_RPG_Game_Bot.Map;
 
 namespace Telegram_RPG_Game_Bot.Managers;
@@ -22,6 +23,11 @@ public static class MapManager
     public static void ShowMap(Character character)
     {
         _map.ShowMap(character);
+    }
+
+    public static void ShowSectorInfo(Character character)
+    {
+        _map.ShowSectorInfo(character);
     }
 
     #region SAVE AND LOAD
