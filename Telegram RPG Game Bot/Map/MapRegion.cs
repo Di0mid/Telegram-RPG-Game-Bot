@@ -48,36 +48,10 @@ public class MapRegion
     {
         return _sectors[(int)id.X, (int)id.Y];
     }
-    
-    public async void ShowRegion(CharacterOnMapData characterOnMapData)
+
+    public MapSector[,] GetAllSector()
     {
-        var sectors = "";
-        
-        for (var i = 0; i < _sectors.GetLength(0); i++)
-        {
-            for (var j = 0; j < _sectors.GetLength(1); j++)
-            {
-                var sector = _sectors[i, j];
-                
-                if (sector.Id == characterOnMapData.SectorId)
-                {
-                    sectors += characterOnMapData.CharacterMapIcon;
-                    continue;
-                }
-                
-                sectors += sector.Icon;
-            }
-
-            sectors += "\n";
-        }
-
-        var region =
-            $"== *КАРТА РЕГИОНА ({Id.X}, {Id.Y})* ==" +
-            $"\n========= *{characterOnMapData.CharacterName}* =========" +
-            $"\n" +
-            $"\n{sectors}";
-        
-        await Bot.SendTextMessageAsync(region);
+        return _sectors;
     }
     
     private void GenerateSectors()
@@ -97,6 +71,8 @@ public class MapRegion
                     _sectors[y, x] = new MapSector(new Vector2(y, x), MapSectorDatabase.Plain);
                 }
                 //TEST
+                
+                
                 
                 //_sectors[y, x] = new MapSector(new Vector2(y, x), MapSectorDatabase.Forest);
             }

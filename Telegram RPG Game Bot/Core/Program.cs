@@ -19,7 +19,7 @@ namespace Telegram_RPG_Game_Bot.Core
 
         private static void Main(string[] args)
         {
-            MapManager.GenerateOrLoadMap();
+            MapManager.GenerateOrLoad();
             CharacterManager.LoadCharacters();
             
             Bot.Start(UpdateHandler, ErrorHandler);
@@ -27,7 +27,7 @@ namespace Telegram_RPG_Game_Bot.Core
             Console.ReadLine();
             
             CharacterManager.SaveCharacters();
-            MapManager.SaveMap();
+            MapManager.Save();
             
             Bot.Stop();
 
@@ -68,14 +68,14 @@ namespace Telegram_RPG_Game_Bot.Core
                         if (!CharacterManager.TryGetCharacter(chat, user, out var character))
                             return;
 
-                        MapManager.ShowMap(character);
+                        MapManager.ShowMapRegion(character);
                     }
                     else if (text.Equals("о секторе", StringComparison.OrdinalIgnoreCase))
                     {
                         if (!CharacterManager.TryGetCharacter(chat, user, out var character))
                             return;
 
-                        MapManager.ShowSectorInfo(character);
+                        MapManager.ShowMapSectorInfo(character);
                     }
                     else if (MoveOnMapCommand.Match(text).Success)
                     {

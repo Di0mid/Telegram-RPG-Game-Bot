@@ -11,10 +11,16 @@ public class MapSector
     
     public MapSector(Vector2 id, MapSectorData data)
     {
+        FogOfWarIcon = "🌫";
+        
         Id = id;
-        Icon = data.Icon;
+        Icon = FogOfWarIcon;
         Type = data.Type;
         TypeName = data.TypeName;
+
+        _baseIcon = data.Icon;
+
+        IsDiscovered = false;
     }
 
     [JsonProperty]
@@ -22,12 +28,26 @@ public class MapSector
     
     [JsonProperty]
     public string Icon { get; private set; }
+    [JsonProperty]
+    public string FogOfWarIcon { get; private set; }
+
+    [JsonProperty]
+    private string _baseIcon;
 
     [JsonProperty] 
     public MapSectorType Type { get; private set; }
     [JsonProperty]
     public string TypeName { get; private set; }
 
+    [JsonProperty]
+    public bool IsDiscovered { get; private set; }
+    
+    public void Discover()
+    {
+        Icon = _baseIcon;
+        IsDiscovered = true;
+    }
+    
     public string Info()
     {
         return $"=== *СЕКТОР ({Id.X}, {Id.Y})* ===" +

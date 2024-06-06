@@ -6,6 +6,6 @@ public static class SavePathDatabase
     
     public static string CharactersSavePath { get; private set; } = CoreSavePath;
     public static string ChatsSavePath { get; private set; } = CoreSavePath;
-    public static string MapSavePath { get; private set; } = CoreSavePath;
+    public static string MapDataSavePath { get; private set; } = CoreSavePath;
 
 }
