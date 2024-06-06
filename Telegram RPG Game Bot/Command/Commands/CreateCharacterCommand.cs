@@ -8,13 +8,15 @@ namespace Telegram_RPG_Game_Bot.Command.Commands;
 public class CreateCharacterCommand : CommandBase
 {
     protected override Regex CommandPattern { get; set; } =
-        new(@"^создать\s+персонажа\s*\nимя:\s+(?<name>\w+)\s*$", RegexOptions.IgnoreCase);
+        new(@"^создать\s+персонажа\s*\nимя:\s*(?<name>\w+)\s*\nиконка:\s*(?<mapIcon>.+)\s*$",
+            RegexOptions.IgnoreCase);
 
     public override void Execute(Chat chat, User user)
     {
         if(Match == null)
             return;
-        
-        CharacterManager.TryCreateCharacter(chat, user, new NewCharacterData(Match.Groups["name"].Value));
+
+        CharacterManager.TryCreateCharacter(chat, user,
+            new NewCharacterData(Match.Groups["name"].Value, Match.Groups["mapIcon"].Value));
     }
 }

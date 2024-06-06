@@ -12,7 +12,7 @@ public class Character
     public Character(int id, NewCharacterData data)
     {
         Id = id;
-        MapIcon = "🧝";
+        MapIcon = data.MapIcon;
         
         Name = data.Name;
 

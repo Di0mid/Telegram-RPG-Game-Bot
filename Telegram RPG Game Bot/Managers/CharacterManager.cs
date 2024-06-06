@@ -10,15 +10,23 @@ public static class CharacterManager
     // TODO: Поработать над названием листа
     private static List<ChatUserCharacters> _characters = new();
     
-    public static async void TryCreateCharacter(Chat chat, User user, NewCharacterData characterData)
+    public static async void TryCreateCharacter(Chat chat, User user, NewCharacterData data)
     {
         if (HasCharacter(chat, user))
         {
             await Bot.SendTextMessageAsync($"@{user.Username}, у тебя уже есть персонаж");
             return;
         }
+
+        if (!AvailableCharacterMapIcons.IconAvailable(data.MapIcon))
+        {
+            await Bot.SendTextMessageAsync($"\"{data.MapIcon}\" - эта иконка недоступна." +
+                                           $"\nДоступные иконки:" +
+                                           $"\n{AvailableCharacterMapIcons.GetAvailableIcons()}");
+            return;
+        }
         
-        var character = new Character(_characters.Count + 1, characterData);
+        var character = new Character(_characters.Count + 1, data);
         if (HasChat(chat))
         {
             var chatUsers = _characters.First(c => c.CompareChat(chat));
