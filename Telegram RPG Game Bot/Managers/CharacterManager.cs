@@ -7,8 +7,7 @@ namespace Telegram_RPG_Game_Bot.Managers;
 
 public static class CharacterManager
 {
-    // TODO: Поработать над названием листа
-    private static List<ChatUserCharacters> _characters = new();
+    private static List<ChatUserCharacters> _chatUserCharacters = new();
     
     public static async void TryCreateCharacter(Chat chat, User user, NewCharacterData data)
     {
@@ -26,15 +25,14 @@ public static class CharacterManager
             return;
         }
         
-        var character = new Character(_characters.Count + 1, data);
-        if (HasChat(chat))
+        var character = new Character(_chatUserCharacters.Count + 1, data);
+        if (TryGetChatUserCharacters(chat, out var chatUserCharacters))
         {
-            var chatUsers = _characters.First(c => c.CompareChat(chat));
-            chatUsers.AddCharacter(user, character);
+            chatUserCharacters.AddCharacter(user, character);
         }
         else
         {
-            _characters.Add(new ChatUserCharacters(chat, new List<UserCharacters> { new(user, character) }));
+            _chatUserCharacters.Add(new ChatUserCharacters(chat, new List<UserCharacters> { new(user, character) }));
         }
         
         MapManager.PlaceCharacter(character);
@@ -43,58 +41,43 @@ public static class CharacterManager
     
     public static bool TryGetCharacter(Chat chat, User user, out Character character)
     {
-        if (!HasChat(chat))
-        {
-            character = null;
-            return false;
-        }
-
-        var chatUserCharacters = _characters.First(chatUserCharacters => chatUserCharacters.CompareChat(chat));
+        if (TryGetChatUserCharacters(chat, out var chatUserCharacters))
+            return chatUserCharacters.TryGetCharacter(user, out character);
         
-        return chatUserCharacters.TryGetCharacter(user, out character);
+        character = null;
+        return false;
     }
-
-    #region CHECKS
+    
+    private static bool TryGetChatUserCharacters(Chat chat, out ChatUserCharacters chatUserCharacters)
+    {
+        chatUserCharacters = _chatUserCharacters.FirstOrDefault(c => c.CompareChat(chat));
+        
+        return chatUserCharacters != null;
+    }
     
     private static bool HasCharacter(Chat chat, User user)
     {
-        
-        if (HasChat(chat))
-        {
-            var chatUserCharacters = _characters.First(chatUserCharacters => chatUserCharacters.CompareChat(chat));
-            return chatUserCharacters.HasUser(user);
-        }
-
-        return false;
+        return TryGetChatUserCharacters(chat, out var chatUserCharacters) && chatUserCharacters.HasUser(user);
     }
-
-    
-    // TODO: Улучшить логику метода
-    private static bool HasChat(Chat chat)
-    {
-        return _characters.Any(c => c.CompareChat(chat));
-    }
-
-    #endregion
 
     #region SAVE AND LOAD
     
     public static async void SaveCharacters()
     {
-        await SaveAndLoadManager.Save(_characters, SavePathDatabase.CharactersSavePath, nameof(_characters));
+        await SaveAndLoadManager.Save(_chatUserCharacters, SavePathDatabase.CharactersSavePath, nameof(_chatUserCharacters));
     }
 
     public static void LoadCharacters()
     {
         var characters = SaveAndLoadManager.Load<List<ChatUserCharacters>>(
-            SavePathDatabase.CharactersSavePath, nameof(_characters));
+            SavePathDatabase.CharactersSavePath, nameof(_chatUserCharacters));
 
         if (characters == null) return;
         
-        _characters = characters;
+        _chatUserCharacters = characters;
         
         // TEST
-        foreach (var character in _characters.SelectMany(
+        foreach (var character in _chatUserCharacters.SelectMany(
                      chatUserCharacters => chatUserCharacters.GetAllCharacters()))
         {
             MapManager.PlaceCharacter(character);

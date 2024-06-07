@@ -5,7 +5,7 @@ using Telegram.Bot.Types;
 namespace Telegram_RPG_Game_Bot;
 
 [JsonObject(MemberSerialization.OptIn)]
-public struct ChatUserCharacters
+public class ChatUserCharacters
 {
     [JsonConstructor]
     public ChatUserCharacters(Chat chat, List<UserCharacters> userCharacters)
