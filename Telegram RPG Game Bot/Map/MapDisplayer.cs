@@ -1,10 +1,13 @@
 ﻿using Telegram_RPG_Game_Bot.Characters;
 using Telegram_RPG_Game_Bot.Core;
+using Telegram.Bot.Types;
 
 namespace Telegram_RPG_Game_Bot.Map;
 
 public static class MapDisplayer
 {
+    private static Message? _lastMapShowMessage;
+    
     public static async void ShowMapRegion(GlobalMap map, CharacterOnMapData data)
     {
         var regionId = data.RegionId;
@@ -37,7 +40,8 @@ public static class MapDisplayer
             $"\n" +
             $"\n{sectorsInfo}";
         
-        await Bot.SendTextMessageAsync(regionInfo);
+        _lastMapShowMessage = await Bot.SendTextMessageAsync(regionInfo);
+        UpdatingLastShowMapMessage(0);
     }
 
     public static async void ShowMapSectorInfo(GlobalMap map, CharacterOnMapData data)
@@ -47,4 +51,19 @@ public static class MapDisplayer
 
         await Bot.SendTextMessageAsync(sector.Info());
     }
+
+    private static async void UpdatingLastShowMapMessage(int updatedCount)
+    {
+        if(_lastMapShowMessage == null)
+            return;
+
+        await Task.Delay(TimeSpan.FromSeconds(1));
+        
+        await Bot.EditMessageTextAsync(_lastMapShowMessage.MessageId, updatedCount.ToString());
+        
+        if(updatedCount == 100)
+            return;
+        
+        UpdatingLastShowMapMessage(updatedCount + 1);
+    } 
 }

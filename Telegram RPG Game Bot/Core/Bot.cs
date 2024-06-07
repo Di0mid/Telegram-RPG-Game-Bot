@@ -86,6 +86,18 @@ public static class Bot
             cancellationToken: CancellationToken);
     }
 
+    public static async Task<Message> EditMessageTextAsync(int messageId, string newText,
+        InlineKeyboardMarkup? replyMarkup = null)
+    {
+        return await BotClient.EditMessageTextAsync(
+            chatId: _currentChat.Id,
+            messageId: messageId,
+            text: newText,
+            parseMode: ParseMode.Markdown,
+            replyMarkup: replyMarkup,
+            cancellationToken: CancellationToken);
+    }
+
     public static async Task<Message> EditMessageCaptionAsync(Chat chat, int messageId, string? caption = null)
     {
         return await BotClient.EditMessageCaptionAsync(

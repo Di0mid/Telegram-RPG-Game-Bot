@@ -41,6 +41,11 @@ public class MapSector
 
     [JsonProperty]
     public bool IsDiscovered { get; private set; }
+
+    public void UpdateIcon()
+    {
+        
+    }
     
     public void Discover()
     {
