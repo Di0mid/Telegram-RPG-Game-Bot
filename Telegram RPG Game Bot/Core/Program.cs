@@ -2,7 +2,6 @@
 using Telegram_RPG_Game_Bot.Characters;
 using Telegram_RPG_Game_Bot.Command;
 using Telegram_RPG_Game_Bot.Managers;
-using Telegram_RPG_Game_Bot.Map;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -13,6 +12,7 @@ namespace Telegram_RPG_Game_Bot.Core
     {
         private static void Main(string[] args)
         {
+            CharacterTeamManager.Load();
             MapManager.GenerateOrLoad();
             CharacterManager.LoadCharacters();
             
@@ -22,7 +22,8 @@ namespace Telegram_RPG_Game_Bot.Core
             
             CharacterManager.SaveCharacters();
             MapManager.Save();
-            
+            CharacterTeamManager.Save();
+
             Bot.Stop();
 
             Console.ReadLine();

@@ -14,7 +14,7 @@ public class MoveOnMapCommand : CommandBase
         if(Match == null)
             return;
         
-        if (!CharacterManager.TryGetCharacter(chat, user, out var character))
+        if (!CharacterManager.TryGetCharacterByUser(chat, user, out var character))
             return;
                         
         if (!MapMovementDirectionMapping.TryGetMovementDirection(Match.Groups["direction"].Value,

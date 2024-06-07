@@ -7,11 +7,15 @@ public static class CommandHandler
 {
     private static readonly HashSet<CommandBase> Commands = new()
     {
+        new AddCharacterTeamMemberCommand(),
+        new ChangeCharacterTeamNameCommand(),
         new CharacteristicLevelUpCommand(),
         new CreateCharacterCommand(),
+        new CreateCharacterTeamCommand(),
         new MoveOnMapCommand(),
         new ShowCharacterCommand(),
         new ShowCharacteristicsCommand(),
+        new ShowCharacterTeamInfoCommand(),
         new ShowMapCommand(),
         new ShowMapSectorInfoCommand(),
     };

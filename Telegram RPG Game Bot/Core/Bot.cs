@@ -24,7 +24,7 @@ public static class Bot
     {
         Console.WriteLine("=== БОТ ЗАПУЩЕН ===");
 
-        var chats = SaveAndLoadManager.Load<List<Chat>>(SavePathDatabase.ChatsSavePath, nameof(_chats));
+        var chats = SaveAndLoadManager.Load<List<Chat>>(SavePaths.ChatsSavePath, nameof(_chats));
         if (chats != null)
             _chats = chats;
         
@@ -39,7 +39,7 @@ public static class Bot
 
     public static async void Stop()
     {
-        await SaveAndLoadManager.Save(_chats, SavePathDatabase.ChatsSavePath, nameof(_chats));
+        await SaveAndLoadManager.Save(_chats, SavePaths.ChatsSavePath, nameof(_chats));
         
         await TrySendTextMessageToAllChats("БОТ ВЫКЛЮЧЕН");
 

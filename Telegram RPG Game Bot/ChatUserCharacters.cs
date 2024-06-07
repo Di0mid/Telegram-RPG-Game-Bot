@@ -35,7 +35,7 @@ public class ChatUserCharacters
         return _userCharacters.Any(userCharacters => userCharacters.CompareUser(user));
     }
 
-    public bool TryGetCharacter(User user, out Character character)
+    public bool TryGetCharacterByUser(User user, out Character character)
     {
         if (!HasUser(user))
         {
@@ -47,6 +47,19 @@ public class ChatUserCharacters
         return true;
     }
 
+    public bool TryGetCharacterByName(string characterName, out Character? character)
+    {
+        foreach (var userCharacter in _userCharacters.Where(userCharacter =>
+                     userCharacter.Character.Name.Equals(characterName)))
+        {
+            character = userCharacter.Character;
+            return true;
+        }
+
+        character = null;
+        return false;
+    }
+    
     public List<Character> GetAllCharacters()
     {
         return _userCharacters.Select(userCharacters => userCharacters.Character).ToList();

@@ -50,10 +50,19 @@ public static class CharacterManager
         await Bot.SendTextMessageAsync($"*{newCharacter.Name}*, добро пожаловать!");        
     }
     
-    public static bool TryGetCharacter(Chat chat, User user, out Character character)
+    public static bool TryGetCharacterByUser(Chat chat, User user, out Character character)
     {
         if (TryGetChatUserCharacters(chat, out var chatUserCharacters))
-            return chatUserCharacters.TryGetCharacter(user, out character);
+            return chatUserCharacters.TryGetCharacterByUser(user, out character);
+        
+        character = null;
+        return false;
+    }
+    
+    public static bool TryGetCharacterByName(Chat chat, string characterName, out Character? character)
+    {
+        if (TryGetChatUserCharacters(chat, out var chatUserCharacters))
+            return chatUserCharacters.TryGetCharacterByName(characterName, out character);
         
         character = null;
         return false;
@@ -75,13 +84,13 @@ public static class CharacterManager
     
     public static async void SaveCharacters()
     {
-        await SaveAndLoadManager.Save(_chatUserCharacters, SavePathDatabase.CharactersSavePath, nameof(_chatUserCharacters));
+        await SaveAndLoadManager.Save(_chatUserCharacters, SavePaths.CharactersSavePath, nameof(_chatUserCharacters));
     }
 
     public static void LoadCharacters()
     {
         var characters = SaveAndLoadManager.Load<List<ChatUserCharacters>>(
-            SavePathDatabase.CharactersSavePath, nameof(_chatUserCharacters));
+            SavePaths.CharactersSavePath, nameof(_chatUserCharacters));
 
         if (characters == null) return;
         

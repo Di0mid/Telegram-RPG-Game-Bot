@@ -80,15 +80,15 @@ public static class MapManager
     
     public static async void Save()
     {
-        await SaveAndLoadManager.Save(_map, SavePathDatabase.MapDataSavePath, nameof(_map));
-        await SaveAndLoadManager.Save(_characterOnMapData, SavePathDatabase.MapDataSavePath,
+        await SaveAndLoadManager.Save(_map, SavePaths.MapDataSavePath, nameof(_map));
+        await SaveAndLoadManager.Save(_characterOnMapData, SavePaths.MapDataSavePath,
             nameof(_characterOnMapData));
     }
     
     public static void GenerateOrLoad()
     {
-        var map = SaveAndLoadManager.Load<GlobalMap>(SavePathDatabase.MapDataSavePath, nameof(_map));
-        var characterOnMapData = SaveAndLoadManager.Load<List<CharacterOnMapData>>(SavePathDatabase.MapDataSavePath,
+        var map = SaveAndLoadManager.Load<GlobalMap>(SavePaths.MapDataSavePath, nameof(_map));
+        var characterOnMapData = SaveAndLoadManager.Load<List<CharacterOnMapData>>(SavePaths.MapDataSavePath,
             nameof(_characterOnMapData));
 
         if (map == null)

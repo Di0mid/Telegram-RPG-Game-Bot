@@ -12,7 +12,7 @@ public class ShowCharacterCommand : CommandBase
 
     public override async void Execute(Chat chat, User user)
     {
-        if (!CharacterManager.TryGetCharacter(chat, user, out var character))
+        if (!CharacterManager.TryGetCharacterByUser(chat, user, out var character))
             return;
 
         await Bot.SendTextMessageAsync(character.MainInfo());
