@@ -19,24 +19,35 @@ public static class CharacterManager
 
         if (!AvailableCharacterMapIcons.IconAvailable(data.MapIcon))
         {
-            await Bot.SendTextMessageAsync($"\"{data.MapIcon}\" - эта иконка недоступна." +
+            await Bot.SendTextMessageAsync($"\"{data.MapIcon}\" - эта иконка недоступна" +
                                            $"\nДоступные иконки:" +
                                            $"\n{AvailableCharacterMapIcons.GetAvailableIcons()}");
             return;
         }
         
-        var character = new Character(_chatUserCharacters.Count + 1, data);
+        var newCharacter = new Character(_chatUserCharacters.Count + 1, data);
         if (TryGetChatUserCharacters(chat, out var chatUserCharacters))
         {
-            chatUserCharacters.AddCharacter(user, character);
+            foreach (var character in chatUserCharacters.GetAllCharacters()
+                         .Where(character => character.MapIcon.Equals(data.MapIcon)))
+            {
+                await Bot.SendTextMessageAsync(
+                    $"\"{data.MapIcon}\" - эта иконка занята персонажем *{character.Name}*" +
+                    $"\nДругие иконки:" +
+                    $"\n{AvailableCharacterMapIcons.GetAvailableIcons()}");
+
+                return;
+            }
+
+            chatUserCharacters.AddCharacter(user, newCharacter);
         }
         else
         {
-            _chatUserCharacters.Add(new ChatUserCharacters(chat, new List<UserCharacters> { new(user, character) }));
+            _chatUserCharacters.Add(new ChatUserCharacters(chat, new List<UserCharacters> { new(user, newCharacter) }));
         }
         
-        MapManager.PlaceCharacter(character);
-        await Bot.SendTextMessageAsync($"*{character.Name}*, добро пожаловать!");        
+        MapManager.PlaceCharacter(newCharacter);
+        await Bot.SendTextMessageAsync($"*{newCharacter.Name}*, добро пожаловать!");        
     }
     
     public static bool TryGetCharacter(Chat chat, User user, out Character character)

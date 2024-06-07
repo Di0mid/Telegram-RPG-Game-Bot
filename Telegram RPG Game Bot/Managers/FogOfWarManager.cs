@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
+using Telegram_RPG_Game_Bot.Map;
 
-namespace Telegram_RPG_Game_Bot.Map;
+namespace Telegram_RPG_Game_Bot.Managers;
 
 public static class FogOfWarManager
 {
