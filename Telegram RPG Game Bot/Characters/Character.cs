@@ -21,6 +21,8 @@ public class Character
         Coins = 100;
 
         _characteristics = new Characteristics(10, 10, 10);
+
+        _inventory = new Inventory();
     }
     
     [JsonProperty]
@@ -32,7 +34,7 @@ public class Character
     [JsonProperty]
     public string Name { get; private set; }
     
-    #region LEVEL
+    #region LEVEL LOGIC
     
     [JsonProperty]
     public int Level { get; private set; }
@@ -45,7 +47,30 @@ public class Character
     [JsonProperty]
     public int Coins { get; private set; }
 
-    #region CHARACTERISTICS
+    #region INVENTORY LOGIC
+
+    [JsonProperty]
+    private Inventory _inventory;
+
+    public void AddItemToInventory(Item item)
+    {
+        _inventory.AddItem(item);
+    }
+
+    public bool TryGetItemFromInventory(string itemName, out Item? item)
+    {
+        return _inventory.TryGetItem(itemName, out item);
+    }
+
+    public string InventoryInfo()
+    {
+        return $"=== *ИНВЕНТАРЬ* ===" +
+               $"\n{_inventory.Info()}";
+    }
+
+    #endregion
+
+    #region CHARACTERISTICS LOGIC
 
     [JsonProperty] 
     private Characteristics _characteristics;
