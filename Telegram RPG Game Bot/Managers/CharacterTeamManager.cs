@@ -1,6 +1,7 @@
 ﻿using Telegram_RPG_Game_Bot.Characters;
 using Telegram_RPG_Game_Bot.Core;
 using Telegram_RPG_Game_Bot.Database;
+using Telegram.Bot.Types;
 
 namespace Telegram_RPG_Game_Bot.Managers;
 
@@ -8,7 +9,7 @@ public static class CharacterTeamManager
 {
     private static List<CharacterTeam> _teams = new();
 
-    public static async void TryCreateTeamWithoutFirstMember(Character leader)
+    public static async void TryCreateTeamWithoutFirstMember(Chat chat, Character leader)
     {
         if (_teams.Any(t => t.CompareLeader(leader)))
         {
@@ -16,7 +17,7 @@ public static class CharacterTeamManager
             return;
         }
         
-        var newTeam = new CharacterTeam(leader);
+        var newTeam = new CharacterTeam(chat, leader);
         _teams.Add(newTeam);
 
         await Bot.SendTextMessageAsync($"Поздравляю, *{leader.Name}*, твоя команда создана!");
@@ -42,6 +43,58 @@ public static class CharacterTeamManager
         await Bot.SendTextMessageAsync($"Поздравляю, *{leader.Name}*, твоя команда создана!");
     }*/
 
+    public static async void TryEpelMember(Character initiator, Character expelledMember)
+    {
+        if (!TryGetTeamByLeader(initiator, out var team))
+        {
+            await Bot.SendTextMessageAsync(
+                $"*{initiator.Name}*, ты не являешься лидером команды, дабы совершить это действие");
+            return;
+        }
+
+        if (!team.ContainsMember(expelledMember))
+        {
+            await Bot.SendTextMessageAsync(
+                $"Персонаж *{expelledMember.Name}* не состоит в команде *{team.Name}*, дабы быть изгнанным из нее");
+            return;
+        }
+
+        if (initiator.Id == expelledMember.Id)
+        {
+            await Bot.SendTextMessageAsync($"*{initiator.Name}*, ты не можешь изгнать самого себя");
+            return;
+        }
+
+        team.EpelMember(expelledMember);
+        await Bot.SendTextMessageAsync($"*{expelledMember.Name}* успешно изгнан из команды *{team.Name}*...");
+    }
+    
+    public static async void TryChangeLeader(Character initiator, Character newLeader)
+    {
+        if (!TryGetTeamByLeader(initiator, out var team))
+        {
+            await Bot.SendTextMessageAsync(
+                $"*{initiator.Name}*, ты не являешься лидером команды, дабы совершить это действие");
+            return;
+        }
+
+        if (!team.ContainsMember(newLeader))
+        {
+            await Bot.SendTextMessageAsync(
+                $"Персонаж *{newLeader.Name}* не состоит в команде *{team.Name}*, дабы стать ее новым лидером");
+            return;
+        }
+
+        if (initiator.Id == newLeader.Id)
+        {
+            await Bot.SendTextMessageAsync($"*{initiator.Name}*, ты уже являешься лидером команды *{team.Name}*");
+            return;
+        }
+        
+        team.ChangeLeader(newLeader);
+        await Bot.SendTextMessageAsync($"*{newLeader.Name}* теперь лидер команды *{team.Name}*!");
+    }
+    
     public static async void TryAddMember(Character leader, Character member)
     {
         if (!TryGetTeamByLeader(leader, out var team))
@@ -50,18 +103,24 @@ public static class CharacterTeamManager
             return;
         }
 
+        if (leader.Id == member.Id)
+        {
+            await Bot.SendTextMessageAsync($"*{leader.Name}*, ты уже являешься членом своей команды - ты ее лидер...");
+            return;
+        }
+
+        if (team.ContainsMember(member))
+        {
+            await Bot.SendTextMessageAsync($"*{member.Name}* - этот персонаж уже состоит в твоей команде");
+            return;
+        }
+        
         if (_teams.Any(t => t.ContainsMember(member)))
         {
             await Bot.SendTextMessageAsync($"*{member.Name}* - этот персонаж уже является членом другой команды");
             return;
         }
         
-        if (team.ContainsMember(member))
-        {
-            await Bot.SendTextMessageAsync($"*{member.Name}* - этот персонаж уже состоит в твоей команде");
-            return;
-        }
-
         team.AddMember(member);
         await Bot.SendTextMessageAsync($"*{member.Name}* стал членом команды *{team.Name}*!");
     }
@@ -84,9 +143,15 @@ public static class CharacterTeamManager
             await Bot.SendTextMessageAsync($"*{leader.Name}*, у тебя нет своей команды");
             return;
         }
+
+        if (_teams.Any(t => t.Name.Equals(newTeamName)))
+        {
+            await Bot.SendTextMessageAsync($"К сожалению, имя \"*{newTeamName}*\" уже занято другой командой");
+            return;
+        }
         
         team.ChangeTeamName(newTeamName);
-        await Bot.SendTextMessageAsync($"**{leader.Name}, имя твоей команды успешно изменено на *{newTeamName}*");
+        await Bot.SendTextMessageAsync($"*{leader.Name}*, имя твоей команды успешно изменено на *{newTeamName}*");
     }
 
     private static bool TryGetTeamByLeaderOrMember(Character leaderOrMember, out CharacterTeam? team)
@@ -100,6 +165,8 @@ public static class CharacterTeamManager
         team = _teams.FirstOrDefault(t => t.CompareLeader(leader));
         return team != null;
     }
+
+    #region SAVE AND LOAD
     
     public static async void Save()
     {
@@ -115,4 +182,6 @@ public static class CharacterTeamManager
         
         _teams = teams;
     }
+    
+    #endregion
 }

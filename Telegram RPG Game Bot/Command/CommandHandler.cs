@@ -8,10 +8,12 @@ public static class CommandHandler
     private static readonly HashSet<CommandBase> Commands = new()
     {
         new AddCharacterTeamMemberCommand(),
+        new ChangeCharacterTeamLeaderCommand(),
         new ChangeCharacterTeamNameCommand(),
         new CharacteristicLevelUpCommand(),
         new CreateCharacterCommand(),
         new CreateCharacterTeamCommand(),
+        new ExpelCharacterTeamMemberCommand(),
         new MoveOnMapCommand(),
         new ShowCharacterCommand(),
         new ShowCharacteristicsCommand(),

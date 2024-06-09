@@ -10,7 +10,7 @@ public class AddCharacterTeamMemberCommand : CommandBase
         RegexOptions.IgnoreCase);
     public override void Execute(Chat chat, User user)
     {
-        if(!CharacterManager.TryGetCharacterByUser(chat, user, out var character))
+        if(!CharacterManager.TryGetCharacter(chat, user, out var character))
             return;
         
         if(Match == null)

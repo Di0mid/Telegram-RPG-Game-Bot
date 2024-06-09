@@ -10,7 +10,7 @@ public class ShowCharacteristicsCommand : CommandBase
     protected override Regex CommandPattern { get; set; } = new(@"^характеристики\s*$", RegexOptions.IgnoreCase);
     public override async void Execute(Chat chat, User user)
     {
-        if(!CharacterManager.TryGetCharacterByUser(chat, user, out var character))
+        if(!CharacterManager.TryGetCharacter(chat, user, out var character))
             return;
         
         await Bot.SendTextMessageAsync(character.CharacteristicsInfo());

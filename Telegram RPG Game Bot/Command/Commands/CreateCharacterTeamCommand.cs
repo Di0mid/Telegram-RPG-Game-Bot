@@ -9,9 +9,9 @@ public class CreateCharacterTeamCommand : CommandBase
     protected override Regex CommandPattern { get; set; } = new(@"^создать\s+команду\s*$", RegexOptions.IgnoreCase);
     public override void Execute(Chat chat, User user)
     {
-        if(!CharacterManager.TryGetCharacterByUser(chat, user, out var character))
+        if(!CharacterManager.TryGetCharacter(chat, user, out var character))
             return;
         
-        CharacterTeamManager.TryCreateTeamWithoutFirstMember(character);
+        CharacterTeamManager.TryCreateTeamWithoutFirstMember(chat, character);
     }
 }

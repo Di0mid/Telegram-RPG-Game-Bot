@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Telegram_RPG_Game_Bot.Managers;
+using Telegram.Bot.Types;
 
 namespace Telegram_RPG_Game_Bot.Characters;
 
@@ -8,31 +10,30 @@ public class CharacterTeam
     [JsonConstructor]
     private CharacterTeam(){}
     
-    public CharacterTeam(Character leader, Character firstMember)
+    public CharacterTeam(Chat chat, Character leader, Character firstMember)
     {
-        SetupTeam(leader, firstMember);
+        SetupTeam(chat, leader, firstMember);
     }
 
-    public CharacterTeam(Character leader)
+    public CharacterTeam(Chat chat, Character leader)
     {
-        SetupTeam(leader);
+        SetupTeam(chat, leader);
     }
     
     [JsonProperty]
     public string Name { get; private set; }
      
     [JsonProperty]
-    private Character _leader;
+    private int _leaderCharacterId;
     [JsonProperty]
-    private List<Character> _members;
+    private List<int> _memberCharactersId;
 
-    public bool ChangeLeader(string newLeaderName)
+    [JsonProperty]
+    private long _chatId;
+
+    public void ChangeLeader(Character newLeader)
     {
-        if (!TryGetMember(newLeaderName, out var member))
-            return false;
-
-        _leader = member;
-        return true;
+        _leaderCharacterId = newLeader.Id;
     }
     
     public void ChangeTeamName(string teamName)
@@ -42,53 +43,45 @@ public class CharacterTeam
     
     public void AddMember(Character member)
     {
-        _members.Add(member);
+        _memberCharactersId.Add(member.Id);
     }
 
-    public bool TryEpelMember(string memberName)
+    public void EpelMember(Character member)
     {
-        if (!TryGetMember(memberName, out var member))
-            return false;
-
-        _members.Remove(member);
-        return true;
+        _memberCharactersId.Remove(member.Id);
     }
     
     public bool CompareLeader(Character leader)
     {
-        return _leader.Id == leader.Id;
+        return _leaderCharacterId == leader.Id;
     }
 
     public bool ContainsMember(Character member)
     {
-        return _members.Any(m => m.Id == member.Id);
+        return _memberCharactersId.Any(m => m == member.Id);
     }
     
-    private bool TryGetMember(string memberName, out Character? member)
-    {
-        member = _members.FirstOrDefault(m => m.Name.Equals(memberName));
-
-        return member != null;
-    }
-
-    private void SetupTeam(Character leader, Character? firstMember = null)
+    private void SetupTeam(Chat chat, Character leader, Character? firstMember = null)
     {
         Name = "ИМЯ КОМАНДЫ";
         
-        _leader = leader;
-        _members = new List<Character> { _leader };
+        _leaderCharacterId = leader.Id;
+        _memberCharactersId = new List<int> { _leaderCharacterId };
 
         if (firstMember != null)
-            _members.Add(firstMember);
+            _memberCharactersId.Add(firstMember.Id);
+
+        _chatId = chat.Id;
     }
     
     public string Info()
     {
-        var membersInfo = _members.Aggregate("", (current, member) => current + $"{member.Name}, ");
+        var membersInfo = _memberCharactersId.Aggregate("",
+            (current, member) => current + $"{CharacterManager.GetCharacterById(_chatId, member).Name}, ");
 
         return $"== *{Name}* ==" +
                $"\n" +
-               $"\n*Лидер*: {_leader.Name}" +
+               $"\n*Лидер*: {CharacterManager.GetCharacterById(_chatId, _leaderCharacterId).Name}" +
                $"\n*Состав*: {membersInfo}";
     }
 }
