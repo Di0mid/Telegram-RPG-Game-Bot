@@ -43,6 +43,17 @@ public static class CharacterTeamManager
         await Bot.SendTextMessageAsync($"Поздравляю, *{leader.Name}*, твоя команда создана!");
     }*/
 
+    public static async void ShowTeamSharedInventory(Character character)
+    {
+        if (!TryGetTeamByMember(character, out var team))
+        {
+            await Bot.SendTextMessageAsync($"*{character.Name}*, ты не состоишь в команде");
+            return;
+        }
+
+        await Bot.SendTextMessageAsync(team.SharedInventoryInfo());
+    }
+    
     public static async void TryEpelMember(Character initiator, Character expelledMember)
     {
         if (!TryGetTeamByLeader(initiator, out var team))
@@ -127,9 +138,9 @@ public static class CharacterTeamManager
     
     public static async void ShowTeamInfo(Character character)
     {
-        if (!TryGetTeamByLeaderOrMember(character, out var team))
+        if (!TryGetTeamByMember(character, out var team))
         {
-            await Bot.SendTextMessageAsync($"*{character.Name}*, у тебя нет своей команды или ты не состоишь ни в одной");
+            await Bot.SendTextMessageAsync($"*{character.Name}*, ты не состоишь в команде");
             return;
         }
 
@@ -154,9 +165,9 @@ public static class CharacterTeamManager
         await Bot.SendTextMessageAsync($"*{leader.Name}*, имя твоей команды успешно изменено на *{newTeamName}*");
     }
 
-    private static bool TryGetTeamByLeaderOrMember(Character leaderOrMember, out CharacterTeam? team)
+    private static bool TryGetTeamByMember(Character member, out CharacterTeam? team)
     {
-        team = _teams.FirstOrDefault(t => t.CompareLeader(leaderOrMember) || t.ContainsMember(leaderOrMember));
+        team = _teams.FirstOrDefault(t => t.ContainsMember(member));
         return team != null;
     }
 

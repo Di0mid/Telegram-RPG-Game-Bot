@@ -5,9 +5,6 @@ namespace Telegram_RPG_Game_Bot;
 [JsonObject(MemberSerialization.OptIn)]
 public class Inventory
 {
-    [JsonConstructor]
-    private Inventory(){}
-    
     [JsonProperty]
     private List<Item> _inventory = new();
 
@@ -30,11 +27,19 @@ public class Inventory
     public string Info()
     {
         var info = "";
-        for (var i = 0; i < _inventory.Count; i++)
+
+        if (_inventory.Count == 0)
         {
-            info += $"\n{i + 1}) {_inventory[i].Name}";
+            info = "\nПУСТО";
         }
-        
+        else
+        {
+            for (var i = 0; i < _inventory.Count; i++)
+            {
+                info += $"\n{i + 1}) {_inventory[i].Name}";
+            }
+        }
+
         return $"{info}";
     }
 }

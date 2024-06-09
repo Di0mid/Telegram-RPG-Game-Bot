@@ -1,4 +1,5 @@
 ﻿using Telegram_RPG_Game_Bot.Command.Commands;
+using Telegram_RPG_Game_Bot.Command.Commands.CharacterTeam;
 using Telegram.Bot.Types;
 
 namespace Telegram_RPG_Game_Bot.Command;
@@ -20,6 +21,8 @@ public static class CommandHandler
         new ShowCharacterTeamInfoCommand(),
         new ShowMapCommand(),
         new ShowMapSectorInfoCommand(),
+        new ShowCharacterTeamSharedInventoryCommand(),
+        new ShowCharacterInventoryCommand(),
     };
 
     public static void Handle(string text, Chat chat, User user)

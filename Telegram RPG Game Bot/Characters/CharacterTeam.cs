@@ -31,16 +31,13 @@ public class CharacterTeam
     [JsonProperty]
     private long _chatId;
 
+    #region MEMBER LOGIC
+    
     public void ChangeLeader(Character newLeader)
     {
         _leaderCharacterId = newLeader.Id;
     }
-    
-    public void ChangeTeamName(string teamName)
-    {
-        Name = teamName;
-    }
-    
+
     public void AddMember(Character member)
     {
         _memberCharactersId.Add(member.Id);
@@ -61,6 +58,36 @@ public class CharacterTeam
         return _memberCharactersId.Any(m => m == member.Id);
     }
     
+    #endregion
+
+    #region INVENTORY LOGIC
+
+    [JsonProperty] 
+    private Inventory _sharedInventory;
+    
+    public void AddItemToSharedInventory(Item item)
+    {
+        _sharedInventory.AddItem(item);
+    }
+
+    public bool TryGetItemFromSharedInventory(string itemName, out Item? item)
+    {
+        return _sharedInventory.TryGetItem(itemName, out item);
+    }
+
+    public string SharedInventoryInfo()
+    {
+        return $"== *ИНВЕНТАРЬ КОМАНДЫ* ==" +
+               $"\n{_sharedInventory.Info()}";
+    }
+    
+    #endregion
+    
+    public void ChangeTeamName(string teamName)
+    {
+        Name = teamName;
+    }
+    
     private void SetupTeam(Chat chat, Character leader, Character? firstMember = null)
     {
         Name = "ИМЯ КОМАНДЫ";
@@ -72,6 +99,8 @@ public class CharacterTeam
             _memberCharactersId.Add(firstMember.Id);
 
         _chatId = chat.Id;
+
+        _sharedInventory = new Inventory();
     }
     
     public string Info()
