@@ -2,7 +2,7 @@
 using Telegram_RPG_Game_Bot.Managers;
 using Telegram.Bot.Types;
 
-namespace Telegram_RPG_Game_Bot.Command.Commands;
+namespace Telegram_RPG_Game_Bot.Command.Commands.CharacterTeam;
 
 public class ShowCharacterTeamInfoCommand : CommandBase
 {
