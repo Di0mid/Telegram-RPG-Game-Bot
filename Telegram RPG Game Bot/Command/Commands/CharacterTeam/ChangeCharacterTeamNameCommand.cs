@@ -16,6 +16,6 @@ public class ChangeCharacterTeamNameCommand : CommandBase
         if(Match == null)
             return;
         
-        CharacterTeamManager.ChangeTeamName(character, Match.Groups["teamName"].Value);
+        CharacterTeamManager.TryChangeTeamName(character, Match.Groups["teamName"].Value);
     }
 }

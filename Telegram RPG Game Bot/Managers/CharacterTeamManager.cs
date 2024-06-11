@@ -147,11 +147,12 @@ public static class CharacterTeamManager
         await Bot.SendTextMessageAsync(team.Info());
     }
     
-    public static async void ChangeTeamName(Character leader, string newTeamName)
+    public static async void TryChangeTeamName(Character initiator, string newTeamName)
     {
-        if (!TryGetTeamByLeader(leader, out var team))
+        if (!TryGetTeamByLeader(initiator, out var team))
         {
-            await Bot.SendTextMessageAsync($"*{leader.Name}*, у тебя нет своей команды");
+            await Bot.SendTextMessageAsync(
+                $"*{initiator.Name}*, у тебя нет команды, в которой ты являешься лидером, для этого действия");
             return;
         }
 
@@ -162,7 +163,7 @@ public static class CharacterTeamManager
         }
         
         team.ChangeTeamName(newTeamName);
-        await Bot.SendTextMessageAsync($"*{leader.Name}*, имя твоей команды успешно изменено на *{newTeamName}*");
+        await Bot.SendTextMessageAsync($"*{initiator.Name}*, имя твоей команды успешно изменено на *{newTeamName}*");
     }
 
     private static bool TryGetTeamByMember(Character member, out CharacterTeam? team)
